@@ -20,6 +20,10 @@ public class IscrizioneCentroVax extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfIndirizzoCentroVax;
+	private JTextField tfNCivico;
+	private JTextField tfComune;
+	private JTextField tfSiglaProvincia;
+	private JTextField tfCAP;
 
 	/**
 	 * Launch the application.
@@ -44,7 +48,7 @@ public class IscrizioneCentroVax extends JFrame {
 	public IscrizioneCentroVax() {
 		setTitle("Registrazione Centro Vaccinale");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 254);
+		setBounds(100, 100, 450, 354);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -56,7 +60,7 @@ public class IscrizioneCentroVax extends JFrame {
 				
 			}
 		});
-		btnRegistra.setBounds(164, 177, 89, 23);
+		btnRegistra.setBounds(164, 273, 89, 23);
 		contentPane.add(btnRegistra);
 		
 		JLabel lblNomeCentroVax = new JLabel("Nome centro vaccinale : ");
@@ -64,12 +68,12 @@ public class IscrizioneCentroVax extends JFrame {
 		lblNomeCentroVax.setBounds(10, 28, 147, 14);
 		contentPane.add(lblNomeCentroVax);
 		
-		JLabel lblIndirizzo = new JLabel("Indirizzo completo : ");
-		lblIndirizzo.setBounds(10, 69, 147, 14);
-		contentPane.add(lblIndirizzo);
+		JLabel lblVia = new JLabel("Via : ");
+		lblVia.setBounds(10, 56, 89, 14);
+		contentPane.add(lblVia);
 		
 		JLabel lblTipologia = new JLabel("Tipologia :");
-		lblTipologia.setBounds(10, 116, 147, 14);
+		lblTipologia.setBounds(10, 212, 147, 14);
 		contentPane.add(lblTipologia);
 		
 		JTextField tfNomeCentroVax = new JTextField();
@@ -78,14 +82,14 @@ public class IscrizioneCentroVax extends JFrame {
 		tfNomeCentroVax.setColumns(10);
 		
 		tfIndirizzoCentroVax = new JTextField();
-		tfIndirizzoCentroVax.setBounds(164, 66, 260, 20);
+		tfIndirizzoCentroVax.setBounds(164, 53, 260, 20);
 		contentPane.add(tfIndirizzoCentroVax);
 		tfIndirizzoCentroVax.setColumns(10);
 		
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Ospedaliero", "Aziendale", "Hub"}));
-		comboBox.setBounds(164, 112, 260, 22);
+		comboBox.setBounds(164, 208, 260, 22);
 		contentPane.add(comboBox);
 		
 		JButton btnBack = new JButton("Indietro");
@@ -94,7 +98,43 @@ public class IscrizioneCentroVax extends JFrame {
 				
 			}
 		});
-		btnBack.setBounds(10, 177, 89, 23);
+		btnBack.setBounds(10, 273, 89, 23);
 		contentPane.add(btnBack);
+		
+		tfNCivico = new JTextField();
+		tfNCivico.setBounds(164, 84, 260, 20);
+		contentPane.add(tfNCivico);
+		tfNCivico.setColumns(10);
+		
+		JLabel lblNCivico = new JLabel("Numero civico :");
+		lblNCivico.setBounds(10, 87, 147, 14);
+		contentPane.add(lblNCivico);
+		
+		tfComune = new JTextField();
+		tfComune.setBounds(164, 115, 260, 20);
+		contentPane.add(tfComune);
+		tfComune.setColumns(10);
+		
+		JLabel lblComune = new JLabel("Comune : ");
+		lblComune.setBounds(10, 118, 147, 14);
+		contentPane.add(lblComune);
+		
+		tfSiglaProvincia = new JTextField();
+		tfSiglaProvincia.setBounds(164, 146, 260, 20);
+		contentPane.add(tfSiglaProvincia);
+		tfSiglaProvincia.setColumns(10);
+		
+		JLabel lblSiglaProvincia = new JLabel("Sigla provincia :");
+		lblSiglaProvincia.setBounds(10, 149, 147, 14);
+		contentPane.add(lblSiglaProvincia);
+		
+		tfCAP = new JTextField();
+		tfCAP.setBounds(164, 177, 260, 20);
+		contentPane.add(tfCAP);
+		tfCAP.setColumns(10);
+		
+		JLabel lblCAP = new JLabel("CAP :");
+		lblCAP.setBounds(10, 180, 46, 14);
+		contentPane.add(lblCAP);
 	}
 }
