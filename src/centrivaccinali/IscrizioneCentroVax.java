@@ -1,6 +1,5 @@
 package centrivaccinali;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -8,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -16,8 +14,10 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class IscrizioneCentroVax extends JFrame {
-
+	
+	public CentroVaccinale CV;
 	private JPanel contentPane;
 	private JTextField tfIndirizzoCentroVax;
 	private JTextField tfNCivico;
@@ -53,15 +53,6 @@ public class IscrizioneCentroVax extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JButton btnRegistra = new JButton("Registra");
-		btnRegistra.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		btnRegistra.setBounds(164, 273, 89, 23);
-		contentPane.add(btnRegistra);
 		
 		JLabel lblNomeCentroVax = new JLabel("Nome centro vaccinale : ");
 		lblNomeCentroVax.setBackground(UIManager.getColor("Button.highlight"));
@@ -136,5 +127,16 @@ public class IscrizioneCentroVax extends JFrame {
 		JLabel lblCAP = new JLabel("CAP :");
 		lblCAP.setBounds(10, 180, 46, 14);
 		contentPane.add(lblCAP);
+		/**
+		 * Inizio btnRegistra
+		 */
+		JButton btnRegistra = new JButton("Registra");
+		btnRegistra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnRegistra.setBounds(164, 273, 89, 23);
+		contentPane.add(btnRegistra);
 	}
 }
