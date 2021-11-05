@@ -11,10 +11,10 @@ public class CentroVaccinale implements Serializable {
 	String nome ;
 	String via ;
 	String nciv ;
-	String citta ;
+	String comune ;
 	String prov ;
 	String CAP ;
-	String tip ;
+	String tipologia ;
 	
 	/**
 	 * Il costruttore crea un istanza con argomenti :
@@ -24,24 +24,24 @@ public class CentroVaccinale implements Serializable {
 	 * @param citta
 	 * @param prov
 	 * @param CAP
-	 * @param tip
+	 * @param tipologia
 	 */
-	public CentroVaccinale(String nome,String via, String nciv,String citta, String prov,String CAP, String tip) {
+	public CentroVaccinale(String nome,String via, String nciv,String comune, String prov,String CAP, String tipologia) {
 		this.nome = nome;
 		this.via = via;
 		this.nciv= nciv;
-		this.citta = citta;
+		this.comune = comune;
 		this.prov = prov;
 		this.CAP = CAP;
-		this.tip = tip;
+		this.tipologia = tipologia;
 	}
 	
 	/**
 	 * Il metodo getCitta() restituisce la citta del centro vaccinale
 	 * @return
 	 */
-	public String getCitta() {
-		return this.citta;
+	public String getComune() {
+		return this.comune;
 	}
 	
 	/**
@@ -68,11 +68,11 @@ public class CentroVaccinale implements Serializable {
 		return this.nome;
 	}
 	/**
-	 * Il metodo getTipris() restituisce il tipo del centro vaccinale
+	 * Il metodo gettipologiaris() restituisce il tipologiao del centro vaccinale
 	 * @return
 	 */
-	public String getTip() {
-		return this.tip;
+	public String getTipologia() {
+		return this.tipologia;
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class CentroVaccinale implements Serializable {
 	 * @return
 	 */
 	public String getInfo() {
-		String info = "Nome : " + this.nome + " | Via : " + this.via + ", " + this.citta + " " + this.CAP + ", " + this.prov + ", Tipologia centro : " + this.tip ;
+		String info = "Nome : " + this.nome + " | Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + ", tipologiaologia centro : " + this.tipologia ;
 		
 		return info;
 	}

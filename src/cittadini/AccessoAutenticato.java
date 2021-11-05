@@ -9,6 +9,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AccessoAutenticato {
 
@@ -24,7 +26,7 @@ public class AccessoAutenticato {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AccessoAutenticato window = new AccessoAutenticato();
+					
 					window.frmInvioDatiEventi.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,6 +45,7 @@ public class AccessoAutenticato {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("serial")
 	private void initialize() {
 		frmInvioDatiEventi = new JFrame();
 		frmInvioDatiEventi.setTitle("Segnalazione eventi avversi");
@@ -92,9 +95,11 @@ public class AccessoAutenticato {
 				"0", "1", "2"
 			}
 		) {
+			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				String.class, String.class, String.class
 			};
+			@SuppressWarnings("unchecked")
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -123,13 +128,21 @@ public class AccessoAutenticato {
 		lblCentroVax.setBounds(10, 10, 321, 14);
 		frmInvioDatiEventi.getContentPane().add(lblCentroVax);
 		
-		JButton btnBack = new JButton("Indietro");
-		btnBack.setBounds(10, 227, 89, 23);
-		frmInvioDatiEventi.getContentPane().add(btnBack);
-		
 		JButton btnSegnala = new JButton("Segnala");
 		btnSegnala.setBounds(242, 227, 89, 23);
 		frmInvioDatiEventi.getContentPane().add(btnSegnala);
+		
+		JButton btnBack = new JButton("Indietro");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				frmInvioDatiEventi.setVisible(false);
+				CittadiniForm.frmCittadini.setVisible(true);
+				frmInvioDatiEventi.dispose();
+			}
+		});
+		btnBack.setBounds(10, 227, 89, 23);
+		frmInvioDatiEventi.getContentPane().add(btnBack);
 		
 		
 	}

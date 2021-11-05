@@ -5,9 +5,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import cittadini.*;
+//import server.ServerCV;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 import java.awt.event.ActionEvent;
 
 public class CentriVaccinali {
@@ -15,7 +20,11 @@ public class CentriVaccinali {
 	static OperatoriForm OF = new OperatoriForm();
 	static CentriVaccinali window = new CentriVaccinali();
 	public static JFrame frmProgettoCentriVaccinali;
-
+	
+	public static Socket socket;
+	public static ObjectInputStream ins;
+	public static ObjectOutputStream outs;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -24,9 +33,19 @@ public class CentriVaccinali {
 			public void run() {
 				try {
 					frmProgettoCentriVaccinali.setVisible(true);
+					/*
+					InetAddress addr = InetAddress.getByName(null);
+					socket = new Socket(addr, ServerCV.PORT);
+					System.err.println("Socket failed");
+					outs = new ObjectOutputStream(socket.getOutputStream());
+					ins = new ObjectInputStream(socket.getInputStream());*/
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				
+				
+				
 			}
 		});
 	}
@@ -69,4 +88,7 @@ public class CentriVaccinali {
 		btnOperatore.setBounds(10, 97, 107, 59);
 		frmProgettoCentriVaccinali.getContentPane().add(btnOperatore);
 	}
+	
+
+	
 }

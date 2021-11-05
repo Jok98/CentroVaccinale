@@ -47,9 +47,12 @@ public class OperatoriForm {
 		frmAppOperatori.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAppOperatori.getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("Iscrizione \r\ncentro vaccinale");
+		JButton btnNewButton = new JButton("Iscrizione centro vaccinale");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				IscrizioneCentroVax.frame.setVisible(true);
+				window.frmAppOperatori.setVisible(false);
+				
 			}
 		});
 		btnNewButton.setBounds(0, 0, 217, 130);
@@ -59,12 +62,15 @@ public class OperatoriForm {
 		btnIscrizioneVax.setBounds(217, 0, 217, 130);
 		btnIscrizioneVax.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				IscrizioneVaccinato.frame.setVisible(true);
+				window.frmAppOperatori.setVisible(false);
 			}
 		});
 		frmAppOperatori.getContentPane().add(btnIscrizioneVax);
 		
 		JButton btnBack = new JButton("Indierto");
 		btnBack.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				CentriVax.frmProgettoCentriVaccinali.setVisible(true);
 				window.frmAppOperatori.dispose();

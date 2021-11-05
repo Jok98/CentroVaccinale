@@ -7,5 +7,5 @@
  */
 module CentroVaccinale {
 	requires java.desktop;
-	requires jdatepicker;
+	requires java.sql;
 }

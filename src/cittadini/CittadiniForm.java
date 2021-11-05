@@ -113,6 +113,7 @@ public class CittadiniForm {
 		
 		JButton btnBack = new JButton("Indietro");
 		btnBack.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				centrivax.frmProgettoCentriVaccinali.setVisible(true);
 				frmCittadini.dispose();

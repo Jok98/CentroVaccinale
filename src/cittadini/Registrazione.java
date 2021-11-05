@@ -28,7 +28,7 @@ public class Registrazione {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Registrazione window = new Registrazione();
+					
 					window.frmRegistrazionePressoCentro.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -123,6 +123,8 @@ public class Registrazione {
 		JButton btnBack = new JButton("Indietro");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				CittadiniForm.frmCittadini.setVisible(true);
+				frmRegistrazionePressoCentro.dispose();
 			}
 		});
 		btnBack.setBounds(10, 248, 89, 23);
