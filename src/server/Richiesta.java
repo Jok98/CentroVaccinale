@@ -1,15 +1,18 @@
-package dipendenze;
+package server;
 
 import java.io.Serializable;
+
+import centrivaccinali.CentroVaccinale;
+import cittadini.Utente;
 
 public class Richiesta implements Serializable{
 	private static final long serialVersionUID = 192873466528L;
 	String operazione;
-	Centrovacc cv;
+	CentroVaccinale cv;
 	String querycom, querytip, querynom ;
 	public Utente ut;
 	
-	public Richiesta(String operazione, Centrovacc cv) {
+	public Richiesta(String operazione, CentroVaccinale cv) {
 		this.operazione= operazione;
 		this.cv= cv;
 	}
@@ -47,7 +50,7 @@ public class Richiesta implements Serializable{
 		return cv.getInfo();
 	}
 
-	public Centrovacc getCv() {
+	public CentroVaccinale getCv() {
 		return cv;
 	}
 	

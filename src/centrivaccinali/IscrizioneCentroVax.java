@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.io.Serializable;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -28,6 +29,8 @@ public class IscrizioneCentroVax extends JFrame {
 	private JTextField tfComune;
 	private JTextField tfSiglaProvincia;
 	private JTextField tfCAP;
+	
+	ConnessioneServer cs ;
 	
 	public static IscrizioneCentroVax frame= new IscrizioneCentroVax();
 	
@@ -189,13 +192,15 @@ public class IscrizioneCentroVax extends JFrame {
 				+ tfSiglaProvincia.getText()+ tfCAP.getText()+ (String) comboBox.getSelectedItem());*/
 				
 				System.out.println(CV.tipologia);	
+				ConnessioneServer cs;
 				try {
-					ConnessioneServer cs = new ConnessioneServer(CentriVaccinali.socket);
-					System.out.println(cs.registraCentroVaccinaleinale(CV));
+					cs = new ConnessioneServer("centroVax", CV);
+					System.out.println(cs.registraCentroVaccinale(cs));
 				} catch (IOException e1) {
-				
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
 
 			}
 		});

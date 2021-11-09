@@ -245,13 +245,13 @@ public class IscrizioneVaccinato extends JFrame {
 						tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
 						(String)cbVax.getSelectedItem() ,tfID.getText());
 				ConnessioneServer cs;
-				try {
-					cs = new ConnessioneServer(CentriVaccinali.socket);
-					System.out.println(cs.registraVaccinato(user));
+				/*try {
+					cs = new ConnessioneServer(CentriVaccinali.socket, "RegistrazioneVaccinato", user);
+					System.out.println(cs.registraVaccinato(cs));
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();
-				}
+				}*/
 				
 			}
 		});

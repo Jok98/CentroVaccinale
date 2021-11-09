@@ -3,32 +3,50 @@ package centrivaccinali;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.io.Serializable;
 import cittadini.Utente;
-//import server.ServerCV;
 
-public class ConnessioneServer {
+
+public class ConnessioneServer implements Serializable {
 	
-	public Socket socket;
+	public static final long serialVersionUID = 192873466528L;
+	public static Socket socket = CentriVaccinali.socket;
 	public static ObjectInputStream ins;
 	public static ObjectOutputStream outs;
+	String richiesta;
+	//Object obj;
+	CentroVaccinale cv;
 
 
-	public ConnessioneServer(Socket socket) throws IOException {
-		this.socket = socket;
+	public ConnessioneServer(String richiesta, Object obj) throws IOException {
 		outs = new ObjectOutputStream(socket.getOutputStream());
 		ins = new ObjectInputStream(socket.getInputStream());
+		this.richiesta = richiesta;
+		//this.cv =cv;
+		
 		
 	}
+
 	
-	public static boolean registraCentroVaccinaleinale(CentroVaccinale cv) {
+	public String getRichiesta() {
+		return richiesta;
+	}
+	
+	public Object getObj() {
+		return cv;
+	}
+	
+	public static boolean registraCentroVaccinale(ConnessioneServer cs) {
 		
 		try {
-			outs.writeObject(cv);
+			
+			outs.writeObject(cs);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -36,11 +54,11 @@ public class ConnessioneServer {
 		return true;
 	}
 	
-	public static boolean registraVaccinato(Utente user) {
+	public static boolean registraVaccinato(ConnessioneServer cs) {
 		
 		try {
-			outs.writeObject(user);
-			System.out.println(user.getNome());
+			outs.writeObject(cs);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
@@ -51,7 +69,7 @@ public class ConnessioneServer {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static boolean cercaCentroVaccinaleinale(String srcCentroVax) {
+	public static boolean cercaCentroVaccinale(String srcCentroVax) {
 
 		try {
 			outs.writeObject(srcCentroVax);

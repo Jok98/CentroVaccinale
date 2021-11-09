@@ -15,6 +15,7 @@ public class CentroVaccinale implements Serializable {
 	String prov ;
 	String CAP ;
 	String tipologia ;
+	public static String richiesta ="centrovax";
 	
 	/**
 	 * Il costruttore crea un istanza con argomenti :

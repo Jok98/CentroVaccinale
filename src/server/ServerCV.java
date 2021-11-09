@@ -19,7 +19,7 @@ public class ServerCV {
 	private static final String password = "Bonardabuono";
 	static Connection conn = null;
 	static Scanner sc= new Scanner(System.in);
-	static final int PORT = 8083;
+	public static final int PORT = 8083;
 	
 
 static public class ServerThread extends Thread{
@@ -38,11 +38,13 @@ static public class ServerThread extends Thread{
 	}	
 
 	
-public static void main(String[] args) throws IOException {
+public static void main(String[] args) throws IOException, SQLException {
 	    ServerSocket s = new ServerSocket(PORT);  
 	    conn = connect();
-	    System.out.println("Server started");
-	    System.out.println(s.getLocalSocketAddress());
+	    	System.out.println("Server started");
+	 	    System.out.println(s.getLocalSocketAddress());
+	    
+	   
 	    try {
 	      while (true) {
 	        Socket socket = s.accept();
@@ -71,7 +73,31 @@ public static void main(String[] args) throws IOException {
 	  
 public void run() {
     try {
-      while (true) {
+    	
+    	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
+    	System.out.println(cs.getRichiesta());
+    	//System.out.println(obj);
+    	//CentroVaccinale cv = (CentroVaccinale) op.getObj(); 
+    	
+    	//System.out.println(op.getRichiesta());
+    	
+    	//CentroVaccinale cv = (CentroVaccinale)oin.readObject();
+    	//System.out.println(cv.getNome());
+    	/*switch(op.getRichiesta()) {
+    	case "centroVax" : 
+    		System.out.println(cv.getNome());
+        	registraCentroVaccinale(conn,cv);
+    		
+    	
+    	
+    	
+    	}*/
+    	
+    	
+    	
+    	
+    	
+      /*while (true) {
     	Richiesta op = (Richiesta) oin.readObject();
         if (op.getOp().equals("INSERT")) {
         	registraCentroVaccinale(conn,op.getCv()); 
@@ -92,7 +118,7 @@ public void run() {
         else if((op.getOp().equals("CIAO"))) {
         	System.out.println("ha scriutto ciao sto scemo...");
         }
-      }
+      }*/
       
     } catch (IOException | ClassNotFoundException e) {
       System.err.println("IO Exception");

@@ -6,13 +6,16 @@ import javax.swing.JFrame;
 
 import cittadini.*;
 //import server.ServerCV;
+import server.ServerCV;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.awt.event.ActionEvent;
 
 public class CentriVaccinali {
@@ -33,12 +36,11 @@ public class CentriVaccinali {
 			public void run() {
 				try {
 					frmProgettoCentriVaccinali.setVisible(true);
-					/*
-					InetAddress addr = InetAddress.getByName(null);
-					socket = new Socket(addr, ServerCV.PORT);
-					System.err.println("Socket failed");
-					outs = new ObjectOutputStream(socket.getOutputStream());
-					ins = new ObjectInputStream(socket.getInputStream());*/
+					
+					openSocket();
+					//System.err.println("Socket failed");
+					//outs = new ObjectOutputStream(socket.getOutputStream());
+					//ins = new ObjectInputStream(socket.getInputStream());
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -89,6 +91,19 @@ public class CentriVaccinali {
 		frmProgettoCentriVaccinali.getContentPane().add(btnOperatore);
 	}
 	
+	public static void openSocket() {
+		InetAddress addr;
+		try {
+			addr = InetAddress.getByName(null);
+			socket = new Socket(addr, ServerCV.PORT);
+			System.out.println(socket.getLocalSocketAddress());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 
 	
 }
