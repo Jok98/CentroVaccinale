@@ -76,49 +76,25 @@ public void run() {
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
     	System.out.println(cs.getRichiesta());
-    	//System.out.println(obj);
-    	//CentroVaccinale cv = (CentroVaccinale) op.getObj(); 
-    	
-    	//System.out.println(op.getRichiesta());
-    	
-    	//CentroVaccinale cv = (CentroVaccinale)oin.readObject();
-    	//System.out.println(cv.getNome());
-    	/*switch(op.getRichiesta()) {
-    	case "centroVax" : 
-    		System.out.println(cv.getNome());
-        	registraCentroVaccinale(conn,cv);
+    	switch(cs.getRichiesta()) {
     		
+    	case "centroVax" :
+    		registraCentroVaccinale(conn,(CentroVaccinale) cs.getObj()); 
+    		break;
     	
+    	case "registrazioneVaccinato" :
+    		registraVaccinato(conn,(Utente) cs.getObj());
+    		break;
     	
-    	
-    	}*/
-    	
-    	
-    	
-    	
-    	
-      /*while (true) {
-    	Richiesta op = (Richiesta) oin.readObject();
-        if (op.getOp().equals("INSERT")) {
-        	registraCentroVaccinale(conn,op.getCv()); 
-        }
-        if (op.getOp().equals("REGISTER")) {
-        	createTablevacc(conn,op.ut.getCvacc()); 
-        	registraVaccinato(conn,op.getUt());
-        }
-        else if (op.getOp().equals("QUERY")) {
-        	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
-        	cvlis = cercaCentroVaccinale(conn,op.getComune());
+    	case "srcCentroVax" :
+    		ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+    		
+        	cvlis = cercaCentroVaccinale(conn,(String) cs.getObj());
         	oout.writeObject(cvlis);
-        }
-        else if (op.getOp().equals("END")) {
-        	System.out.println("closing...");
-        	break;
-        }
-        else if((op.getOp().equals("CIAO"))) {
-        	System.out.println("ha scriutto ciao sto scemo...");
-        }
-      }*/
+    		break;
+    	
+    	}
+
       
     } catch (IOException | ClassNotFoundException e) {
       System.err.println("IO Exception");

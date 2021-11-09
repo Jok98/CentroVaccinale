@@ -229,6 +229,7 @@ public class IscrizioneVaccinato extends JFrame {
 		
 		JButton btnRegistra = new JButton("Registra");
 		btnRegistra.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				String sDate1=tfDataVaccinazione.getText();  
 				SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
@@ -245,13 +246,13 @@ public class IscrizioneVaccinato extends JFrame {
 						tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
 						(String)cbVax.getSelectedItem() ,tfID.getText());
 				ConnessioneServer cs;
-				/*try {
-					cs = new ConnessioneServer(CentriVaccinali.socket, "RegistrazioneVaccinato", user);
+				try {
+					cs = new ConnessioneServer("registrazioneVaccinato", user);
 					System.out.println(cs.registraVaccinato(cs));
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();
-				}*/
+				}
 				
 			}
 		});

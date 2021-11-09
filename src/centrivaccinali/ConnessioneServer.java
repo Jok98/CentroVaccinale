@@ -19,15 +19,13 @@ public class ConnessioneServer implements Serializable {
 	public static ObjectInputStream ins;
 	public static ObjectOutputStream outs;
 	String richiesta;
-	//Object obj;
-	CentroVaccinale cv;
-
+	Object obj;
 
 	public ConnessioneServer(String richiesta, Object obj) throws IOException {
 		outs = new ObjectOutputStream(socket.getOutputStream());
 		ins = new ObjectInputStream(socket.getInputStream());
 		this.richiesta = richiesta;
-		//this.cv =cv;
+		this.obj =obj;
 		
 		
 	}
@@ -38,7 +36,7 @@ public class ConnessioneServer implements Serializable {
 	}
 	
 	public Object getObj() {
-		return cv;
+		return obj;
 	}
 	
 	public static boolean registraCentroVaccinale(ConnessioneServer cs) {
@@ -69,10 +67,10 @@ public class ConnessioneServer implements Serializable {
 	
 	
 	@SuppressWarnings("unchecked")
-	public static boolean cercaCentroVaccinale(String srcCentroVax) {
+	public static boolean cercaCentroVaccinale(ConnessioneServer cs) {
 
 		try {
-			outs.writeObject(srcCentroVax);
+			outs.writeObject(cs);
 			ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 			cvlis = (ArrayList<CentroVaccinale>) ins.readObject();
 			/*for (CentroVaccinale c : cvlis) {
