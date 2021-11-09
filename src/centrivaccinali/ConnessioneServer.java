@@ -39,7 +39,7 @@ public class ConnessioneServer implements Serializable {
 		return obj;
 	}
 	
-	public static boolean registraCentroVaccinale(ConnessioneServer cs) {
+	public static boolean richiestaServer(ConnessioneServer cs) {
 		
 		try {
 			
@@ -52,17 +52,7 @@ public class ConnessioneServer implements Serializable {
 		return true;
 	}
 	
-	public static boolean registraVaccinato(ConnessioneServer cs) {
-		
-		try {
-			outs.writeObject(cs);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+
 	
 	
 	

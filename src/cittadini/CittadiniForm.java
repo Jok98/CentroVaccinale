@@ -10,13 +10,18 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
 import centrivaccinali.CentriVaccinali;
+import centrivaccinali.ConnessioneServer;
 
 import java.awt.TextField;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
+import javax.swing.JLabel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class CittadiniForm {
 
@@ -56,7 +61,7 @@ public class CittadiniForm {
 	private void initialize() {
 		frmCittadini = new JFrame();
 		frmCittadini.setTitle("App Cittadini - Centri Vaccinali");
-		frmCittadini.setBounds(100, 100, 450, 371);
+		frmCittadini.setBounds(100, 100, 575, 496);
 		frmCittadini.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCittadini.getContentPane().setLayout(null);
 		
@@ -67,7 +72,7 @@ public class CittadiniForm {
 				frmCittadini.setVisible(false);
 			}
 		});
-		btnLogIn.setBounds(335, 302, 89, 23);
+		btnLogIn.setBounds(460, 423, 89, 23);
 		frmCittadini.getContentPane().add(btnLogIn);
 		
 		JButton btnRegistrazione = new JButton("Registrati");
@@ -77,7 +82,7 @@ public class CittadiniForm {
 				frmCittadini.setVisible(false);
 			}
 		});
-		btnRegistrazione.setBounds(168, 302, 89, 23);
+		btnRegistrazione.setBounds(345, 423, 89, 23);
 		frmCittadini.getContentPane().add(btnRegistrazione);
 		
 	
@@ -93,22 +98,58 @@ public class CittadiniForm {
 			
 		});
 		list_result.setBackground(Color.WHITE);
-		list_result.setBounds(1, 46, 323, 95);
+		list_result.setBounds(10, 139, 539, 206);
 		frmCittadini.getContentPane().add(list_result);
-		JScrollPane scroll = new JScrollPane (list_result);
+		/*JScrollPane scroll = new JScrollPane (list_result);
 		scroll.setBounds(10, 52, 414, 142);
-		frmCittadini.getContentPane().add(scroll);
+		frmCittadini.getContentPane().add(scroll);*/
 		
-		TextField tfRicerca = new TextField();
-		tfRicerca.setBounds(168, 10, 180, 22);
-		frmCittadini.getContentPane().add(tfRicerca);
+		TextField tfRicercaNome = new TextField();
+		tfRicercaNome.setBounds(85, 38, 349, 22);
+		frmCittadini.getContentPane().add(tfRicercaNome);
 		
-		Label lblRicerca = new Label("Ricerca centro vaccinale : ");
+		Label lblRicerca = new Label("Ricerca centro vaccinale per : ");
 		lblRicerca.setBounds(10, 10, 177, 22);
 		frmCittadini.getContentPane().add(lblRicerca);
 		
+		TextField tfRicercaComune = new TextField();
+		tfRicercaComune.setBounds(85, 66, 349, 22);
+		frmCittadini.getContentPane().add(tfRicercaComune);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ospedale"}));
+		comboBox.setSelectedIndex(0);
+		comboBox.setBounds(195, 94, 239, 22);
+		frmCittadini.getContentPane().add(comboBox);
+		
 		Button btnCerca = new Button("Cerca");
-		btnCerca.setBounds(354, 10, 70, 22);
+		btnCerca.addActionListener(new ActionListener() {
+			@SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent e) {
+				if(!tfRicercaNome.getText().isEmpty()&tfRicercaComune.getText().isEmpty()&comboBox.getSelectedIndex()==0) {
+					try {
+						ConnessioneServer cs = new ConnessioneServer("srcCentroVax", tfRicercaNome.getText());
+						System.out.println(ConnessioneServer.richiestaServer(cs));
+					} catch (IOException e1) {
+					
+						e1.printStackTrace();
+					}
+					
+				}
+				
+				if(tfRicercaNome.getText().isEmpty()&!tfRicercaComune.getText().isEmpty()&comboBox.getSelectedIndex()>=1) {
+					try {
+						String[] dati_ricerca = {tfRicercaComune.getText(),(String) comboBox.getSelectedItem()};
+						ConnessioneServer cs = new ConnessioneServer("ricercaCVComuneTipologia", dati_ricerca);
+						System.out.println(ConnessioneServer.richiestaServer(cs));
+					} catch (IOException e1) {
+						
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		btnCerca.setBounds(460, 40, 89, 76);
 		frmCittadini.getContentPane().add(btnCerca);
 		
 		JButton btnBack = new JButton("Indietro");
@@ -119,15 +160,27 @@ public class CittadiniForm {
 				frmCittadini.dispose();
 			}
 		});
-		btnBack.setBounds(10, 302, 89, 23);
+		btnBack.setBounds(10, 423, 89, 23);
 		frmCittadini.getContentPane().add(btnBack);
 		
 		JButton btnShowResult = new JButton("Mostra dati");
-		btnShowResult.setBounds(159, 205, 110, 23);
+		btnShowResult.setBounds(195, 355, 110, 23);
 		frmCittadini.getContentPane().add(btnShowResult);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 250, 434, 23);
+		separator.setBounds(10, 389, 559, 23);
 		frmCittadini.getContentPane().add(separator);
+		
+		JLabel lblNome = new JLabel("Nome :");
+		lblNome.setBounds(10, 46, 69, 14);
+		frmCittadini.getContentPane().add(lblNome);
+		
+		JLabel lblComune = new JLabel("Comune :");
+		lblComune.setBounds(10, 71, 69, 14);
+		frmCittadini.getContentPane().add(lblComune);
+		
+		JLabel lblTipologia = new JLabel("Tipologia :");
+		lblTipologia.setBounds(10, 96, 147, 14);
+		frmCittadini.getContentPane().add(lblTipologia);
 	}
 }

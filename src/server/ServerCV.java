@@ -13,6 +13,7 @@ import java.util.Scanner;
 import centrivaccinali.*;
 import cittadini.Utente;
 
+
 public class ServerCV {
 	private static final String url = "jdbc:postgresql://127.0.0.1/Lab B";
 	private static final String user = "postgres";
@@ -21,12 +22,14 @@ public class ServerCV {
 	static Scanner sc= new Scanner(System.in);
 	public static final int PORT = 8083;
 	
+	
 
 static public class ServerThread extends Thread{
 	private Socket socket;
 	private ObjectInputStream oin;
 	private ObjectOutputStream oout;
-	
+	private PreparedStatement statement;
+	private static ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 	
 	ServerThread (Socket s){
 		socket = s;
@@ -57,7 +60,6 @@ public static void main(String[] args) throws IOException, SQLException {
 	    }
 	}
 	
-
 	public static Connection connect() {
 	Connection conn = null;
 	  try {
@@ -76,6 +78,7 @@ public void run() {
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
     	System.out.println(cs.getRichiesta());
+    	
     	switch(cs.getRichiesta()) {
     		
     	case "centroVax" :
@@ -87,16 +90,34 @@ public void run() {
     		break;
     	
     	case "srcCentroVax" :
-    		ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+    		System.out.println("trasferimento dati eseguito");
+    		String n = "SELECT * FROM centrivaccinali WHERE nome=?";
+    		statement = conn.prepareStatement(n);
+    		String nomeCentro = (String) cs.getObj();
+    		System.out.println(nomeCentro);
+    		statement.setString(1, (nomeCentro));
     		
-        	cvlis = cercaCentroVaccinale(conn,(String) cs.getObj());
+        	cvlis = cercaCentroVaccinale(statement);
         	oout.writeObject(cvlis);
+        	cvlis.clear();
     		break;
-    	
+    		
+    	case "ricercaCVComuneTipologia" :
+    		
+    		String ct = "SELECT * FROM centrivaccinali WHERE comune=? AND tipologia=?";
+    		statement = conn.prepareStatement(ct);
+    		String[] ComuneTip = (String[]) cs.getObj();
+			statement.setString(1, ComuneTip[0]);
+			statement.setString(2, ComuneTip[1]);
+			System.out.println(ComuneTip[0]+ComuneTip[1]);
+			cvlis = new ArrayList<CentroVaccinale>();
+        	cvlis = cercaCentroVaccinale(statement);
+        	oout.writeObject(cvlis);
+			cvlis.clear();
+    		break;
     	}
 
-      
-    } catch (IOException | ClassNotFoundException e) {
+    } catch (IOException | ClassNotFoundException | SQLException e) {
       System.err.println("IO Exception");
 		e.printStackTrace();
 	} 
@@ -109,6 +130,43 @@ public void run() {
     }
 }	
 }
+
+
+public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement statement) {
+	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+	CentroVaccinale cv = null;
+	String nome,via,nciv,citta,prov,CAP,tip = null;
+	
+	try {
+		if(!conn.isValid(5)) {
+			System.out.println("Connessione col database non stabile o assente");
+		} else {
+			System.out.println("Connessione col database valida");
+		}
+		} catch (SQLException a) {
+		a.printStackTrace();
+		}
+
+		try {
+			
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+                prov = rs.getString(1);
+                nciv = rs.getString(2);
+                CAP = rs.getString(3);
+                citta = rs.getString(4);
+                nome = rs.getString(5);
+                via = rs.getString(6);
+                tip = rs.getString(7);
+                cv = new CentroVaccinale (nome, via ,nciv, citta, prov, CAP, tip);
+                cvlis.add(cv);
+            }
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cvlis;
+	 }
 
 public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale cv) {
 	try {
@@ -140,6 +198,23 @@ public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale 
 		}
 		return true;
 	 }
+
+public static  boolean registraCittadino(Connection conn, Utente user) {
+	try {
+		if(!conn.isValid(5)) {
+			System.out.println("Connessione col database non stabile o assente");
+			return false;
+		} else {
+			System.out.println("Connessione col database valida");
+		}
+		
+	} catch (SQLException a) {
+		a.printStackTrace();
+	}
+	String query = "SELECT * FROM centrivaccinali WHERE comune=?";
+	
+	return true;
+}
 
 public static  boolean registraVaccinato(Connection conn, Utente ut) {
 	try {
@@ -178,9 +253,9 @@ public static  boolean registraVaccinato(Connection conn, Utente ut) {
 		statement.executeUpdate();
 		statement.close();
 	} catch (SQLException e) {	
-			e.printStackTrace();
-			return false;
-		}
+		e.printStackTrace();
+		return false;
+	}
 	return true;
 }
 
@@ -196,12 +271,23 @@ public static  boolean createTablevacc(Connection conn, String nomecv) {
 			a.printStackTrace();
 			return false;
 		}
-        String qs = "CREATE TABLE IF NOT EXISTS vaccinati_"+nomecv+"(user_id SERIAL NOT NULL PRIMARY KEY,namecv varchar(60),nome varchar(60), cognome varchar(60), codfisc varchar(16), datavacc date, vaccino varchar(20))";
+		String risultato = null;
+		String query = "SELECT * FROM centrivaccinali WHERE nome=?";
 		try {
-			
-			PreparedStatement statement = conn.prepareStatement(qs);	
+			PreparedStatement statement = conn.prepareStatement(query);		
+			statement.setString(1, nomecv);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				risultato = rs.getString(5);
+            }
+		if (!(risultato == null)) {
+			String qs = "CREATE TABLE IF NOT EXISTS vaccinati_"+nomecv+"(user_id SERIAL NOT NULL PRIMARY KEY,namecv varchar(60),nome varchar(60), cognome varchar(60), codfisc varchar(16), datavacc date, vaccino varchar(20))";
+			statement = conn.prepareStatement(qs);	
 			statement.executeUpdate();
 			statement.close();
+		} else {
+			return false;
+		}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false ;
@@ -209,44 +295,6 @@ public static  boolean createTablevacc(Connection conn, String nomecv) {
 		return true;
 	 }
 
-public static ArrayList<CentroVaccinale> cercaCentroVaccinale(Connection conn, String comune) {
-	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
-	CentroVaccinale cv = null;
-	String nome,via,nciv,citta,prov,CAP,tip = null;
-	
-	try {
-		if(!conn.isValid(5)) {
-			System.out.println("Connessione col database non stabile o assente");
-		} else {
-			System.out.println("Connessione col database valida");
-		}
-		} catch (SQLException a) {
-		a.printStackTrace();
-		}
-		//String nomecentro = "centrivaccinali";	
-		//String query = "SELECT siglaprov,numciv,cap,comune,nome,indirizzo,tipologia FROM "+nomecentro+" WHERE comune='molina'";
-		//String query = "SELECT * FROM centrivaccinali WHERE comune="+"'"+comune+"'";
-		String query = "SELECT * FROM centrivaccinali WHERE comune=?";
-		try {
-			PreparedStatement statement = conn.prepareStatement(query);		
-			statement.setString(1, comune);
-			ResultSet rs = statement.executeQuery();
-			while (rs.next()) {
-                prov = rs.getString(1);
-                nciv = rs.getString(2);
-                CAP = rs.getString(3);
-                citta = rs.getString(4);
-                nome = rs.getString(5);
-                via = rs.getString(6);
-                tip = rs.getString(7);
-                cv = new CentroVaccinale (nome, via ,nciv, citta, prov, CAP, tip);
-                cvlis.add(cv);
-            }
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return cvlis;
-	 }
+
 
 }

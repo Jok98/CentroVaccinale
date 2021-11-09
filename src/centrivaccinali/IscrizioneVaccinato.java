@@ -248,7 +248,7 @@ public class IscrizioneVaccinato extends JFrame {
 				ConnessioneServer cs;
 				try {
 					cs = new ConnessioneServer("registrazioneVaccinato", user);
-					System.out.println(cs.registraVaccinato(cs));
+					System.out.println(cs.richiestaServer(cs));
 				} catch (IOException e1) {
 					
 					e1.printStackTrace();

@@ -26,7 +26,7 @@ public class AccessoAutenticato {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
+					//AccessoAutenticato window = new AccessoAutenticato();
 					window.frmInvioDatiEventi.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

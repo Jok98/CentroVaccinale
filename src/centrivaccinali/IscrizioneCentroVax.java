@@ -192,10 +192,10 @@ public class IscrizioneCentroVax extends JFrame {
 				+ tfSiglaProvincia.getText()+ tfCAP.getText()+ (String) comboBox.getSelectedItem());*/
 				
 				System.out.println(CV.tipologia);	
-				ConnessioneServer cs;
+				
 				try {
-					cs = new ConnessioneServer("centroVax", CV);
-					System.out.println(cs.registraCentroVaccinale(cs));
+					ConnessioneServer cs = new ConnessioneServer("centroVax", CV);
+					System.out.println(cs.richiestaServer(cs));
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
