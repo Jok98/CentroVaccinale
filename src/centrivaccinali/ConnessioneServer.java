@@ -30,7 +30,6 @@ public class ConnessioneServer implements Serializable {
 		
 	}
 
-	
 	public String getRichiesta() {
 		return richiesta;
 	}
@@ -52,10 +51,6 @@ public class ConnessioneServer implements Serializable {
 		return true;
 	}
 	
-
-	
-	
-	
 	@SuppressWarnings("unchecked")
 	public static boolean cercaCentroVaccinale(ConnessioneServer cs) {
 
@@ -63,9 +58,7 @@ public class ConnessioneServer implements Serializable {
 			outs.writeObject(cs);
 			ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 			cvlis = (ArrayList<CentroVaccinale>) ins.readObject();
-			/*for (CentroVaccinale c : cvlis) {
-				c.getInfo();
-			}*/
+		
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return false;

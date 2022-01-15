@@ -9,9 +9,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import centrivaccinali.*;
 import cittadini.Utente;
+
 
 
 public class ServerCV {
@@ -30,6 +32,7 @@ static public class ServerThread extends Thread{
 	private ObjectOutputStream oout;
 	private PreparedStatement statement;
 	private static ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+	private HashMap<String, Integer> Eventiavversi = new HashMap<>();
 	
 	ServerThread (Socket s){
 		socket = s;
@@ -73,6 +76,7 @@ public static void main(String[] args) throws IOException, SQLException {
 
 
 	  
+@SuppressWarnings("unchecked")
 public void run() {
     try {
     	
@@ -103,7 +107,6 @@ public void run() {
     		break;
     		
     	case "ricercaCVComuneTipologia" :
-    		
     		String ct = "SELECT * FROM centrivaccinali WHERE comune=? AND tipologia=?";
     		statement = conn.prepareStatement(ct);
     		String[] ComuneTip = (String[]) cs.getObj();
@@ -114,6 +117,14 @@ public void run() {
         	cvlis = cercaCentroVaccinale(statement);
         	oout.writeObject(cvlis);
 			cvlis.clear();
+    		break;
+    	/**
+    	 * TODO gestire media eventi avversi 	
+    	 */
+    	case "eventiAvversi":
+    		Eventiavversi = (HashMap<String, Integer>) cs.getObj();
+    		System.out.println("funziona" );
+    		System.out.println(Eventiavversi);
     		break;
     	}
 
@@ -294,6 +305,7 @@ public static  boolean createTablevacc(Connection conn, String nomecv) {
 		}
 		return true;
 	 }
+
 
 
 

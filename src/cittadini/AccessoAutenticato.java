@@ -5,11 +5,16 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import centrivaccinali.ConnessioneServer;
+
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 
 public class AccessoAutenticato {
@@ -17,8 +22,9 @@ public class AccessoAutenticato {
 	public JFrame frmInvioDatiEventi;
 	public static AccessoAutenticato window = new AccessoAutenticato();
 	private JTable tblEventiAvversi;
-	private JTable tblNomeColonne;
 	private JTextField tfCentroVax;
+	
+	private HashMap<String, Integer> Eventiavversi = new HashMap<>();
 	/**
 	 * Launch the application.
 	 */
@@ -26,7 +32,7 @@ public class AccessoAutenticato {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//AccessoAutenticato window = new AccessoAutenticato();
+					AccessoAutenticato window = new AccessoAutenticato();
 					window.frmInvioDatiEventi.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,62 +63,32 @@ public class AccessoAutenticato {
 		tblEventiAvversi.setRowSelectionAllowed(false);
 		tblEventiAvversi.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"mal di testa", null, null},
-				{"febbre", null, null},
-				{"dolori muscolari e articolari", null, null},
-				{"linfoadenopatia", null, null},
-				{"tachicardia", null, null},
-				{"crisi ipertensiva", null, null},
+				{"Mal di testa", null},
+				{"Febbre", null},
+				{"Dolori muscolari e articolari", null},
+				{"Linfoadenopatia", null},
+				{"Tachicardia", null},
+				{"Crisi ipertensiva", null},
+				{"Note aggiuntive", null},
 			},
 			new String[] {
-				"Evento", "Severita", "Note"
+				"EventoAvverso", "Severita"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				Object.class, Integer.class, Object.class
+				String.class, Integer.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 		});
 		tblEventiAvversi.getColumnModel().getColumn(0).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(0).setPreferredWidth(175);
+		tblEventiAvversi.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tblEventiAvversi.getColumnModel().getColumn(0).setMinWidth(100);
 		tblEventiAvversi.getColumnModel().getColumn(1).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(1).setPreferredWidth(105);
-		tblEventiAvversi.getColumnModel().getColumn(2).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(2).setPreferredWidth(200);
-		tblEventiAvversi.getColumnModel().getColumn(2).setMinWidth(35);
-		tblEventiAvversi.setBounds(10, 70, 601, 96);
+		tblEventiAvversi.getColumnModel().getColumn(1).setPreferredWidth(35);
+		tblEventiAvversi.setBounds(10, 70, 587, 112);
 		frmInvioDatiEventi.getContentPane().add(tblEventiAvversi);
-		
-		tblNomeColonne = new JTable();
-		tblNomeColonne.setEnabled(false);
-		tblNomeColonne.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Evento avverso", "Severit\u00E0 (da 1 a 5)", "Note opzionali (256 caratteri)"},
-			},
-			new String[] {
-				"0", "1", "2"
-			}
-		) {
-			@SuppressWarnings("rawtypes")
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, String.class
-			};
-			@SuppressWarnings("unchecked")
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		tblNomeColonne.getColumnModel().getColumn(0).setResizable(false);
-		tblNomeColonne.getColumnModel().getColumn(0).setPreferredWidth(175);
-		tblNomeColonne.getColumnModel().getColumn(1).setResizable(false);
-		tblNomeColonne.getColumnModel().getColumn(1).setPreferredWidth(105);
-		tblNomeColonne.getColumnModel().getColumn(2).setResizable(false);
-		tblNomeColonne.getColumnModel().getColumn(2).setPreferredWidth(200);
-		tblNomeColonne.setRowSelectionAllowed(false);
-		tblNomeColonne.setBounds(10, 48, 601, 16);
-		frmInvioDatiEventi.getContentPane().add(tblNomeColonne);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(0, 38, 621, 10);
@@ -129,6 +105,27 @@ public class AccessoAutenticato {
 		frmInvioDatiEventi.getContentPane().add(lblCentroVax);
 		
 		JButton btnSegnala = new JButton("Segnala");
+		btnSegnala.addActionListener(new ActionListener() {
+		/**
+		 * @param e
+		 * TODO da inserire controlli su input e modificare valore cella note in stringa
+		 * 
+		 */
+			public void actionPerformed(ActionEvent e) {
+				System.out.println((String) tblEventiAvversi.getModel().getValueAt(0, 0));
+				for(int i =0 ; i<6; i++) {	
+					Eventiavversi.put((String) tblEventiAvversi.getModel().getValueAt(i, 0),  (Integer) tblEventiAvversi.getModel().getValueAt(i, 1)) ;
+				}
+				try {
+					ConnessioneServer cs = new ConnessioneServer("eventiAvversi", Eventiavversi);
+					System.out.println(ConnessioneServer.richiestaServer(cs));
+				} catch (IOException e1) {
+					
+					e1.printStackTrace();
+				}
+				//System.out.println(Eventiavversi);
+			}
+		});
 		btnSegnala.setBounds(242, 227, 89, 23);
 		frmInvioDatiEventi.getContentPane().add(btnSegnala);
 		
