@@ -33,6 +33,7 @@ static public class ServerThread extends Thread{
 	private PreparedStatement statement;
 	private static ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 	private HashMap<String, Integer> Eventiavversi = new HashMap<>();
+	private HashMap <String, String> datiLogIn = new HashMap <String, String>();
 	
 	ServerThread (Socket s){
 		socket = s;
@@ -81,7 +82,7 @@ public void run() {
     try {
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
-    	System.out.println(cs.getRichiesta());
+    	System.out.println("La richiesta è : " +cs.getRichiesta());
     	
     	switch(cs.getRichiesta()) {
     		
@@ -119,13 +120,23 @@ public void run() {
 			cvlis.clear();
     		break;
     	/**
-    	 * TODO gestire media eventi avversi 	
+    	 * TODO gestire media eventi avversi e rinviare al client	
     	 */
     	case "eventiAvversi":
     		Eventiavversi = (HashMap<String, Integer>) cs.getObj();
     		System.out.println("funziona" );
     		System.out.println(Eventiavversi);
     		break;
+    	
+    	case "LogIn":
+    		datiLogIn = (HashMap<String, String>) cs.getObj();
+    		//Boolean logIn_result = loginCittadino(conn, datiLogIn);
+    		//TODO inserire come parametro logIn_result al posto di true dopo che si è verificata che l'interazione col db sia corretta
+    		cs.setObj(true);
+    		cs.getObj();
+    		oout.writeObject(cs);
+    		break;
+    	
     	}
 
     } catch (IOException | ClassNotFoundException | SQLException e) {
@@ -306,6 +317,24 @@ public static  boolean createTablevacc(Connection conn, String nomecv) {
 		return true;
 	 }
 
+public static boolean loginCittadino(Connection conn,HashMap <String, String> datiLogIn) {
+
+	String query = "SELECT userid,password FROM cittadini_registrati WHERE userid=? AND password=?" ;
+	try {
+		PreparedStatement statement = conn.prepareStatement(query);
+		statement.setString(1, datiLogIn.get("ID"));
+		statement.setString(2, datiLogIn.get("Password"));
+		ResultSet rs = statement.executeQuery();
+		if (rs.next() == false) { 
+			return false;
+		} else {
+			return true;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	return false;
+}
 
 
 

@@ -196,7 +196,7 @@ public class IscrizioneCentroVax extends JFrame {
 				try {
 					ConnessioneServer cs = new ConnessioneServer("centroVax", CV);
 					System.out.println(cs.richiestaServer(cs));
-				} catch (IOException e1) {
+				} catch (IOException | ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

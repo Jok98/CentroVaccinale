@@ -17,11 +17,14 @@ import java.awt.Label;
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
 
 public class CittadiniForm {
 
@@ -29,6 +32,9 @@ public class CittadiniForm {
 	static Registrazione registrazione = new Registrazione();
 	static AccessoAutenticato AccessConf = new AccessoAutenticato();
 	static CentriVaccinali centrivax = new CentriVaccinali();
+	private JTextField tfID;
+	private JPasswordField passwordField;
+	private Boolean logIn_status = false;
 	/**
 	 * Launch the application.
 	 */
@@ -57,19 +63,33 @@ public class CittadiniForm {
 	 * Initialize the contents of the frame.
 	 */
 	
-	@SuppressWarnings({ "unchecked", "rawtypes", "serial" })
+	
+	@SuppressWarnings("unchecked")
 	private void initialize() {
 		frmCittadini = new JFrame();
 		frmCittadini.setTitle("App Cittadini - Centri Vaccinali");
-		frmCittadini.setBounds(100, 100, 575, 496);
+		frmCittadini.setBounds(100, 100, 575, 513);
 		frmCittadini.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCittadini.getContentPane().setLayout(null);
 		
 		JButton btnLogIn = new JButton("LogIn");
 		btnLogIn.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
-				AccessConf.frmInvioDatiEventi.setVisible(true);
-				frmCittadini.setVisible(false);
+				HashMap <String, String> datiLogIn = new HashMap <String, String>();
+				datiLogIn.put("ID", tfID.getText());	
+				datiLogIn.put("Password", String.valueOf(passwordField.getPassword()));
+				
+				//System.out.println(datiLogIn.get("Password"));
+				try {
+					ConnessioneServer cs = new ConnessioneServer("LogIn", datiLogIn);
+					System.out.println(ConnessioneServer.richiestaServer(cs));
+				} catch (IOException | ClassNotFoundException e1) {
+					
+					e1.printStackTrace();
+				}
+				//AccessConf.frmInvioDatiEventi.setVisible(true);
+				//frmCittadini.setVisible(false);
 			}
 		});
 		btnLogIn.setBounds(460, 423, 89, 23);
@@ -82,7 +102,7 @@ public class CittadiniForm {
 				frmCittadini.setVisible(false);
 			}
 		});
-		btnRegistrazione.setBounds(345, 423, 89, 23);
+		btnRegistrazione.setBounds(109, 440, 89, 23);
 		frmCittadini.getContentPane().add(btnRegistrazione);
 		
 	
@@ -130,7 +150,7 @@ public class CittadiniForm {
 					try {
 						ConnessioneServer cs = new ConnessioneServer("srcCentroVax", tfRicercaNome.getText());
 						System.out.println(ConnessioneServer.richiestaServer(cs));
-					} catch (IOException e1) {
+					} catch (IOException | ClassNotFoundException e1) {
 					
 						e1.printStackTrace();
 					}
@@ -142,7 +162,7 @@ public class CittadiniForm {
 						String[] dati_ricerca = {tfRicercaComune.getText(),(String) comboBox.getSelectedItem()};
 						ConnessioneServer cs = new ConnessioneServer("ricercaCVComuneTipologia", dati_ricerca);
 						System.out.println(ConnessioneServer.richiestaServer(cs));
-					} catch (IOException e1) {
+					} catch (IOException | ClassNotFoundException e1) {
 						
 						e1.printStackTrace();
 					}
@@ -160,7 +180,7 @@ public class CittadiniForm {
 				frmCittadini.dispose();
 			}
 		});
-		btnBack.setBounds(10, 423, 89, 23);
+		btnBack.setBounds(10, 440, 89, 23);
 		frmCittadini.getContentPane().add(btnBack);
 		
 		JButton btnShowResult = new JButton("Mostra dati");
@@ -168,7 +188,7 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(btnShowResult);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(10, 389, 559, 23);
+		separator.setBounds(0, 389, 569, 14);
 		frmCittadini.getContentPane().add(separator);
 		
 		JLabel lblNome = new JLabel("Nome :");
@@ -182,5 +202,34 @@ public class CittadiniForm {
 		JLabel lblTipologia = new JLabel("Tipologia :");
 		lblTipologia.setBounds(10, 96, 147, 14);
 		frmCittadini.getContentPane().add(lblTipologia);
+		
+		JLabel lblID = new JLabel("ID :");
+		lblID.setBounds(297, 414, 41, 14);
+		frmCittadini.getContentPane().add(lblID);
+		
+		JLabel lblPassword = new JLabel("Password :");
+		lblPassword.setBounds(262, 444, 76, 14);
+		frmCittadini.getContentPane().add(lblPassword);
+		
+		tfID = new JTextField();
+		tfID.setBounds(348, 411, 86, 20);
+		frmCittadini.getContentPane().add(tfID);
+		tfID.setColumns(10);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(348, 441, 86, 20);
+		frmCittadini.getContentPane().add(passwordField);
 	}
+	
+	public static void LogIn_Result(Boolean result) {
+		//logIn_status=result;
+		if(result==true) {
+			AccessConf.frmInvioDatiEventi.setVisible(true);
+			frmCittadini.setVisible(false);
+		}else {
+			System.out.println("Dati logIn errati");
+		}
+	}
+	
+	
 }

@@ -119,7 +119,7 @@ public class AccessoAutenticato {
 				try {
 					ConnessioneServer cs = new ConnessioneServer("eventiAvversi", Eventiavversi);
 					System.out.println(ConnessioneServer.richiestaServer(cs));
-				} catch (IOException e1) {
+				} catch (IOException | ClassNotFoundException e1) {
 					
 					e1.printStackTrace();
 				}
