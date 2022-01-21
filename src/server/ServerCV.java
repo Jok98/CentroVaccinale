@@ -16,10 +16,11 @@ import cittadini.Utente;
 
 
 
+
 public class ServerCV {
 	private static final String url = "jdbc:postgresql://127.0.0.1/Lab B";
 	private static final String user = "postgres";
-	private static final String password = "Bonardabuono";
+	private static final String password = "admin";
 	static Connection conn = null;
 	static Scanner sc= new Scanner(System.in);
 	public static final int PORT = 8083;
@@ -130,9 +131,9 @@ public void run() {
     	
     	case "LogIn":
     		datiLogIn = (HashMap<String, String>) cs.getObj();
-    		//Boolean logIn_result = loginCittadino(conn, datiLogIn);
+    		Boolean logIn_result = loginCittadino(conn, datiLogIn);
     		//TODO inserire come parametro logIn_result al posto di true dopo che si è verificata che l'interazione col db sia corretta
-    		cs.setObj(true);
+    		cs.setObj(logIn_result);
     		cs.getObj();
     		oout.writeObject(cs);
     		break;
@@ -157,7 +158,9 @@ public void run() {
 public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement statement) {
 	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 	CentroVaccinale cv = null;
-	String nome,via,nciv,citta,prov,CAP,tip = null;
+	String nome,via,citta,prov,tip = null;
+	Integer CAP;
+	int nciv;
 	
 	try {
 		if(!conn.isValid(5)) {
@@ -174,8 +177,8 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
                 prov = rs.getString(1);
-                nciv = rs.getString(2);
-                CAP = rs.getString(3);
+                nciv = rs.getInt(2);
+                CAP = rs.getInt(3);
                 citta = rs.getString(4);
                 nome = rs.getString(5);
                 via = rs.getString(6);
@@ -206,8 +209,8 @@ public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale 
 			
 			PreparedStatement statement = conn.prepareStatement(state);	
 			statement.setString(1, cv.getProv());
-			statement.setString(2, cv.getNciv());
-			statement.setString(3, cv.getCap());
+			statement.setInt(2, cv.getNciv());
+			statement.setInt(3, cv.getCap());
 			statement.setString(4, cv.getComune());
 			statement.setString(5, cv.getNome());
 			statement.setString(6, cv.getVia());
@@ -335,6 +338,35 @@ public static boolean loginCittadino(Connection conn,HashMap <String, String> da
 	}
 	return false;
 }
+
+/*public static boolean inserisciEventiAvversi(Connection conn, Richiesta op) {
+	try {
+		if(!conn.isValid(5)) {
+			System.err.println("Connessione col database non stabile o assente");
+			return false;
+		} else {
+			System.out.println("Connessione col database valida");
+		}
+	} catch (SQLException a) {
+		a.printStackTrace();
+	}
+	String upd = "INSERT INTO eventiavv (mal di testa, note mal di testa, febbre, note febbre, dolori muscolari, 
+	note dolori muscolari, linfoadenopatia, note linfoadenopatia,tachicardia, note tachicardia ,crisi ipertensiva,note crisi ipertensiva) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+	int eventiavv[] = op.getEventiavv();
+	String eventiavvnote[] = op.getEventiavvnote();
+	try {
+		PreparedStatement statement = conn.prepareStatement(upd);
+		for (int i = 0 ; i <= 5; i++) {
+			statement.setInt((i*2) + 1 , eventiavv[i]);
+			statement.setString((i*2) + 2 , eventiavvnote[i]);
+		}
+		statement.executeUpdate();
+	} catch (SQLException e) {
+		e.printStackTrace();
+		return false;
+	}
+	return true;
+}*/
 
 
 

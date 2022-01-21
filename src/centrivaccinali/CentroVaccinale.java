@@ -10,10 +10,10 @@ public class CentroVaccinale implements Serializable {
 	private static final long serialVersionUID = 7613409875169727612L;
 	String nome ;
 	String via ;
-	String nciv ;
+	Integer nciv ;
 	String comune ;
 	String prov ;
-	String CAP ;
+	Integer CAP ;
 	String tipologia ;
 	public static String richiesta ="centrovax";
 	
@@ -27,7 +27,7 @@ public class CentroVaccinale implements Serializable {
 	 * @param CAP
 	 * @param tipologia
 	 */
-	public CentroVaccinale(String nome,String via, String nciv,String comune, String prov,String CAP, String tipologia) {
+	public CentroVaccinale(String nome,String via, Integer nciv,String comune, String prov,Integer CAP, String tipologia) {
 		this.nome = nome;
 		this.via = via;
 		this.nciv= nciv;
@@ -57,7 +57,7 @@ public class CentroVaccinale implements Serializable {
 	 * Il metodo getCap() restituisce il cap del centro vaccinale
 	 * @return
 	 */
-	public String getCap() {
+	public Integer getCap() {
 		return this.CAP;
 	}
 	
@@ -88,7 +88,7 @@ public class CentroVaccinale implements Serializable {
 	 * Il metodo getNciv() restituisce il numero civico del centro vaccinale
 	 * @return
 	 */
-	public String getNciv() {
+	public Integer getNciv() {
 		return this.nciv;
 	}
 	

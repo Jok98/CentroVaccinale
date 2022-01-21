@@ -15,7 +15,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.awt.event.ActionEvent;
 
 public class CentriVaccinali {
@@ -38,9 +37,7 @@ public class CentriVaccinali {
 					frmProgettoCentriVaccinali.setVisible(true);
 					
 					openSocket();
-					//System.err.println("Socket failed");
-					//outs = new ObjectOutputStream(socket.getOutputStream());
-					//ins = new ObjectInputStream(socket.getInputStream());
+					
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -95,7 +92,7 @@ public class CentriVaccinali {
 		InetAddress addr;
 		try {
 			addr = InetAddress.getByName(null);
-			socket = new Socket(addr, ServerCV.PORT);
+			socket = new Socket(addr, 8083);
 			System.out.println(socket.getLocalSocketAddress());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

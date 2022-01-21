@@ -186,8 +186,8 @@ public class IscrizioneCentroVax extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				//creare nuova istanza locale nel caso in cui non funzionasse
-				CV = new CentroVaccinale(tfNomeCentroVax.getText(), tfIndirizzoCentroVax.getText(), tfNCivico.getText(), 
-						tfComune.getText(), tfSiglaProvincia.getText(), tfCAP.getText(), (String) comboBox.getSelectedItem());
+				CV = new CentroVaccinale(tfNomeCentroVax.getText(), tfIndirizzoCentroVax.getText(), Integer.valueOf(tfNCivico.getText()), 
+						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem());
 				/*System.out.println(tfNomeCentroVax.getText()+  tfIndirizzoCentroVax.getText()+ tfNCivico.getText()+ tfComune.getText()
 				+ tfSiglaProvincia.getText()+ tfCAP.getText()+ (String) comboBox.getSelectedItem());*/
 				

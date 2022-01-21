@@ -1,18 +1,12 @@
 package centrivaccinali;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.io.Serializable;
-
 import cittadini.CittadiniForm;
-import cittadini.Utente;
 
 
 public class ConnessioneServer implements Serializable {
