@@ -97,13 +97,13 @@ public void run() {
     	
     	case "srcCentroVax" :
     		System.out.println("trasferimento dati eseguito");
-    		String n = "SELECT * FROM centrivaccinali WHERE nome=?";
+    		String n = "SELECT * FROM centrivaccinali WHERE nome LIKE ? ";
     		statement = conn.prepareStatement(n);
     		String nomeCentro = (String) cs.getObj();
-    		System.out.println(nomeCentro);
-    		statement.setString(1, (nomeCentro));
-    		
+    		//System.out.println("base di ricerca centro vax : "+nomeCentro);
+    		statement.setString(1, (nomeCentro+"%"));
         	cvlis = cercaCentroVaccinale(statement);
+        	//System.out.println("centro vax trovati: "+cvlis);
         	oout.writeObject(cvlis);
         	cvlis.clear();
     		break;
@@ -139,27 +139,21 @@ public void run() {
     		break;
     	
     	}
-
+    	 socket.close();
     } catch (IOException | ClassNotFoundException | SQLException e) {
       System.err.println("IO Exception");
 		e.printStackTrace();
 	} 
-    finally {
-      try {
-        socket.close();
-      } catch (IOException e) {
-        System.err.println("Socket not closed");
-      }
-    }
+  
 }	
 }
 
 
 public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement statement) {
-	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>() ;
 	CentroVaccinale cv = null;
 	String nome,via,citta,prov,tip = null;
-	Integer CAP;
+	int CAP;
 	int nciv;
 	
 	try {
@@ -171,7 +165,7 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 		} catch (SQLException a) {
 		a.printStackTrace();
 		}
-
+	
 		try {
 			
 			ResultSet rs = statement.executeQuery();
@@ -185,6 +179,7 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
                 tip = rs.getString(7);
                 cv = new CentroVaccinale (nome, via ,nciv, citta, prov, CAP, tip);
                 cvlis.add(cv);
+                
             }
 			statement.close();
 		} catch (SQLException e) {
@@ -253,7 +248,9 @@ public static  boolean registraVaccinato(Connection conn, Utente ut) {
 	} catch (SQLException a) {
 		a.printStackTrace();
 	}
+	createTablevacc(conn, ut.getCvacc());
 	int id ;
+	System.out.println("il centro vac ricevuto dal server : "+ut.getCvacc());
 	String query = "SELECT * FROM vaccinati_"+ut.getCvacc();
 	try {
 		Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);		
@@ -285,17 +282,7 @@ public static  boolean registraVaccinato(Connection conn, Utente ut) {
 }
 
 public static  boolean createTablevacc(Connection conn, String nomecv) {
-	try {
-		if(!conn.isValid(5)) {
-			System.out.println("Connessione col database non stabile o assente");
-			return false;
-		} else {
-			System.out.println("Connessione col database valida");
-		}
-		} catch (SQLException a) {
-			a.printStackTrace();
-			return false;
-		}
+
 		String risultato = null;
 		String query = "SELECT * FROM centrivaccinali WHERE nome=?";
 		try {

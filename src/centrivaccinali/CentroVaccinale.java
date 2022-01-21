@@ -97,7 +97,7 @@ public class CentroVaccinale implements Serializable {
 	 * @return
 	 */
 	public String getInfo() {
-		String info = "Nome : " + this.nome + " | Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + ", tipologiaologia centro : " + this.tipologia ;
+		String info = "Nome : " + this.nome + "\r\n"+"Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + "\r\n"+"Tipologia centro : " + this.tipologia ;
 		
 		return info;
 	}

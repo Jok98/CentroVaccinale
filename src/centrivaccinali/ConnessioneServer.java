@@ -34,6 +34,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 		this.obj =obj;
 	}
 
+
 	public String getRichiesta() {
 		return richiesta;
 	}
@@ -46,7 +47,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 		return this.richiesta =richiesta;
 	}
 	
-	public Object setObj(Object obj) {
+	public  Object setObj(Object obj) {
 		return this.obj=obj;
 	}
 	
@@ -67,6 +68,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 	}
 	/**
 	 * TODO vedere se è problematico un solo login, se si torna indietro non si può più accedere
+	 * Nascosto errore java.io.EOFException causato da : ConnessioneServer return_cs =  (ConnessioneServer) oin.readObject();
 	 */
 	public static void ricezioneServer() {
 		
@@ -83,26 +85,28 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 	    	
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
     	
     	
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static boolean cercaCentroVaccinale(ConnessioneServer cs) {
 
+	@SuppressWarnings("unchecked")
+	public ArrayList<CentroVaccinale> cercaCentroVaccinale(ConnessioneServer cs) {
+		ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 		try {
 			oout.writeObject(cs);
-			ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
+			
 			cvlis = (ArrayList<CentroVaccinale>) oin.readObject();
 		
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
-			return false;
+			
 		}
-	
-		return true;
+		//System.out.println("il client ha ricevuto dal server il centro vax : "+cvlis.get(0).getNome()+" "+cvlis.size());
+		
+		return cvlis;
 	}
 }
 
