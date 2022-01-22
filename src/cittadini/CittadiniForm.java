@@ -10,14 +10,19 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 
 import centrivaccinali.CentriVaccinali;
+import centrivaccinali.CentroVaccinale;
 import centrivaccinali.ConnessioneServer;
 
 import java.awt.TextField;
 import java.awt.Label;
+
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -35,7 +40,7 @@ public class CittadiniForm {
 	static CentriVaccinali centrivax = new CentriVaccinali();
 	private JTextField tfID;
 	private JPasswordField passwordField;
-	private Boolean logIn_status = false;
+	private ArrayList<CentroVaccinale> src_result;
 	/**
 	 * Launch the application.
 	 */
@@ -100,7 +105,7 @@ public class CittadiniForm {
 		JButton btnRegistrazione = new JButton("Registrati");
 		btnRegistrazione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Registrazione.frmRegistrazionePressoCentro.setVisible(true);
+				Registrazione.frame.setVisible(true);
 				frmCittadini.setVisible(false);
 			}
 		});
@@ -108,20 +113,19 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(btnRegistrazione);
 		
 	
-		JList list_result = new JList();
-		list_result.setModel(new AbstractListModel() {
-			String[] values = new String[] {"1", "23", "3", "5", "1", "8", "418", "148"};
+		JList listCentriVax = new JList();
+		listCentriVax.setModel(new AbstractListModel() {
+			String[] values = new String[] {};
 			public int getSize() {
 				return values.length;
 			}
 			public Object getElementAt(int index) {
 				return values[index];
 			}
-			
 		});
-		list_result.setBackground(Color.WHITE);
-		list_result.setBounds(10, 139, 539, 206);
-		frmCittadini.getContentPane().add(list_result);
+		listCentriVax.setBackground(Color.WHITE);
+		listCentriVax.setBounds(10, 139, 539, 206);
+		frmCittadini.getContentPane().add(listCentriVax);
 		/*JScrollPane scroll = new JScrollPane (list_result);
 		scroll.setBounds(10, 52, 414, 142);
 		frmCittadini.getContentPane().add(scroll);*/
@@ -139,7 +143,7 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(tfRicercaComune);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ospedale"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"", "Ospedaliero", "Aziendale", "Hub"}));
 		comboBox.setSelectedIndex(0);
 		comboBox.setBounds(195, 94, 239, 22);
 		frmCittadini.getContentPane().add(comboBox);
@@ -152,8 +156,24 @@ public class CittadiniForm {
 					try {
 						Socket socket = CentriVaccinali.openSocket();
 						ConnessioneServer cs = new ConnessioneServer(socket,"srcCentroVax", tfRicercaNome.getText());
-						System.out.println(ConnessioneServer.richiestaServer(cs));
-					} catch (IOException | ClassNotFoundException e1) {
+					
+						src_result =cs.cercaCentroVaccinale(cs);
+						String[] centroVax_nome = new String[src_result.size()]  ;
+						
+						for(int i=0; i<src_result.size();i++) {
+							centroVax_nome[i]=src_result.get(i).getNome();
+						}
+						
+						listCentriVax.setModel(new AbstractListModel() {
+							String[] values = centroVax_nome ;
+							public int getSize() {
+								return values.length;
+							}
+							public Object getElementAt(int index) {
+								return values[index];
+							}
+						});
+					} catch (IOException e1) {
 					
 						e1.printStackTrace();
 					}
@@ -164,9 +184,26 @@ public class CittadiniForm {
 					try {
 						String[] dati_ricerca = {tfRicercaComune.getText(),(String) comboBox.getSelectedItem()};
 						Socket socket = CentriVaccinali.openSocket();
+						
 						ConnessioneServer cs = new ConnessioneServer(socket,"ricercaCVComuneTipologia", dati_ricerca);
-						System.out.println(ConnessioneServer.richiestaServer(cs));
-					} catch (IOException | ClassNotFoundException e1) {
+					
+						src_result =cs.cercaCentroVaccinale(cs);
+						String[] centroVax_nome = new String[src_result.size()]  ;
+						
+						for(int i=0; i<src_result.size();i++) {
+							centroVax_nome[i]=src_result.get(i).getNome();
+						}
+						
+						listCentriVax.setModel(new AbstractListModel() {
+							String[] values = centroVax_nome ;
+							public int getSize() {
+								return values.length;
+							}
+							public Object getElementAt(int index) {
+								return values[index];
+							}
+						});
+					} catch (IOException e1) {
 						
 						e1.printStackTrace();
 					}
@@ -188,6 +225,11 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(btnBack);
 		
 		JButton btnShowResult = new JButton("Mostra dati");
+		btnShowResult.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
+			}
+		});
 		btnShowResult.setBounds(195, 355, 110, 23);
 		frmCittadini.getContentPane().add(btnShowResult);
 		
@@ -231,7 +273,7 @@ public class CittadiniForm {
 			AccessConf.frmInvioDatiEventi.setVisible(true);
 			frmCittadini.setVisible(false);
 		}else {
-			System.out.println("Dati logIn errati");
+			showMessageDialog(null,"Dati logIn errati");
 		}
 	}
 	

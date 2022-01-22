@@ -53,7 +53,7 @@ public class IscrizioneVaccinato extends JFrame {
 	private JLabel lblNewLabel_3;
 	private JTextField tfDataVaccinazione;
 	private JTextField tfID;
-	private JList listCentriVax;
+	
 	public static IscrizioneVaccinato frame = new IscrizioneVaccinato();
 	
 	private ArrayList<CentroVaccinale> src_result;

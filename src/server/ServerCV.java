@@ -18,6 +18,7 @@ import cittadini.Utente;
 
 
 
+
 public class ServerCV {
 	private static final String url = "jdbc:postgresql://127.0.0.1/Lab B";
 	private static final String user = "postgres";
@@ -112,12 +113,12 @@ public void run() {
     		break;
     		
     	case "ricercaCVComuneTipologia" :
-    		String ct = "SELECT * FROM centrivaccinali WHERE comune=? AND tipologia=?";
+    		String ct = "SELECT * FROM centrivaccinali WHERE comune LIKE ? AND tipologia=?";
     		statement = conn.prepareStatement(ct);
     		String[] ComuneTip = (String[]) cs.getObj();
 			statement.setString(1, ComuneTip[0]);
 			statement.setString(2, ComuneTip[1]);
-			System.out.println(ComuneTip[0]+ComuneTip[1]);
+			System.out.println("Il server ha ricevuto richiesta per ricerca di : "+ComuneTip[0]+" "+ComuneTip[1]);
 			cvlis = new ArrayList<CentroVaccinale>();
         	cvlis = cercaCentroVaccinale(statement);
         	oout.writeObject(cvlis);
@@ -330,6 +331,57 @@ public static boolean loginCittadino(Connection conn,HashMap <String, String> da
 	}
 	return false;
 }
+
+/*public static  boolean registraCittadino(Connection conn, Utente user) {
+	try {
+		if(!conn.isValid(5)) {
+			System.out.println("Connessione col database non stabile o assente");
+			return false;
+		} else {
+			System.out.println("Connessione col database valida");
+		}
+		
+	} catch (SQLException a) {
+		a.printStackTrace();
+	}
+	Boolean errore = false ;
+	String nomecvacc = user.getNome();
+	String query = "SELECT * FROM vaccinati_"+nomecvacc+" WHERE nome=? AND cognome=? AND codfisc=? AND user_id=? ";
+	try {
+	PreparedStatement statement = conn.prepareStatement(query);		
+	statement.setString(1, user.getNome());
+	statement.setString(2, user.getCognome());
+	statement.setString(3, user.getCodfisc());
+	statement.setInt(4, user.getIdvacc());
+	ResultSet rs = statement.executeQuery();
+	if (rs.next() == false) { 
+		errore = true ;
+	}
+	} catch (SQLException a) {
+		a.printStackTrace();
+	}
+	if (errore == true) {
+		return false ;
+	} 
+	else {
+		System.out.println("sto per inserire");
+		String stmt = "INSERT INTO cittadini_registrati (nome,cognome,codfisc,email,userid,password,id)"+ "VALUES (?,?,?,?,?,?,?)";
+		try {
+			PreparedStatement statement = conn.prepareStatement(stmt);
+			statement.setString(1, user.getNome());
+			statement.setString(2, user.getCognome());
+			statement.setString(3, user.getCodfisc());
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getUserid());
+			statement.setString(6, user.getPswd());
+			statement.setInt(7, user.getIdvacc());
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	return true;
+}*/
 
 /*public static boolean inserisciEventiAvversi(Connection conn, Richiesta op) {
 	try {
