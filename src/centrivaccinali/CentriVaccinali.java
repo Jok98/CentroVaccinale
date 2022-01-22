@@ -5,8 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 import cittadini.*;
-//import server.ServerCV;
-import server.ServerCV;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -36,7 +34,7 @@ public class CentriVaccinali {
 				try {
 					frmProgettoCentriVaccinali.setVisible(true);
 					
-					openSocket();
+					//openSocket();
 					
 					
 				} catch (Exception e) {
@@ -88,7 +86,7 @@ public class CentriVaccinali {
 		frmProgettoCentriVaccinali.getContentPane().add(btnOperatore);
 	}
 	
-	public static void openSocket() {
+	public static Socket openSocket() {
 		InetAddress addr;
 		try {
 			addr = InetAddress.getByName(null);
@@ -98,6 +96,7 @@ public class CentriVaccinali {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return socket;
 		
 		
 	}

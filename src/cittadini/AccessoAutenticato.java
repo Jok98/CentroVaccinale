@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import centrivaccinali.CentriVaccinali;
 import centrivaccinali.ConnessioneServer;
 
 import javax.swing.JSeparator;
@@ -14,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
 
@@ -117,7 +119,8 @@ public class AccessoAutenticato {
 					Eventiavversi.put((String) tblEventiAvversi.getModel().getValueAt(i, 0),  (Integer) tblEventiAvversi.getModel().getValueAt(i, 1)) ;
 				}
 				try {
-					ConnessioneServer cs = new ConnessioneServer("eventiAvversi", Eventiavversi);
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"eventiAvversi", Eventiavversi);
 					System.out.println(ConnessioneServer.richiestaServer(cs));
 				} catch (IOException | ClassNotFoundException e1) {
 					

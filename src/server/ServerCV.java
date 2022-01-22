@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+
 import centrivaccinali.*;
 import cittadini.Utente;
 
@@ -80,11 +81,13 @@ public static void main(String[] args) throws IOException, SQLException {
 	  
 @SuppressWarnings("unchecked")
 public void run() {
+		
     try {
+    	
+    	
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
     	System.out.println("La richiesta è : " +cs.getRichiesta());
-    	
     	switch(cs.getRichiesta()) {
     		
     	case "centroVax" :
@@ -144,8 +147,10 @@ public void run() {
       System.err.println("IO Exception");
 		e.printStackTrace();
 	} 
+   
+	}
   
-}	
+
 }
 
 

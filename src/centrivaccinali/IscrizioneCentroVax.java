@@ -17,6 +17,7 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.Socket;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -188,13 +189,12 @@ public class IscrizioneCentroVax extends JFrame {
 				//creare nuova istanza locale nel caso in cui non funzionasse
 				CV = new CentroVaccinale(tfNomeCentroVax.getText(), tfIndirizzoCentroVax.getText(), Integer.valueOf(tfNCivico.getText()), 
 						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem());
-				/*System.out.println(tfNomeCentroVax.getText()+  tfIndirizzoCentroVax.getText()+ tfNCivico.getText()+ tfComune.getText()
-				+ tfSiglaProvincia.getText()+ tfCAP.getText()+ (String) comboBox.getSelectedItem());*/
 				
 				System.out.println(CV.tipologia);	
 				
 				try {
-					ConnessioneServer cs = new ConnessioneServer("centroVax", CV);
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"centroVax", CV);
 					System.out.println(cs.richiestaServer(cs));
 				} catch (IOException | ClassNotFoundException e1) {
 					// TODO Auto-generated catch block

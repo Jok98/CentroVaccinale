@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
 import cittadini.CittadiniForm;
+import server.ServerCV;
 
 
 public class ConnessioneServer implements Serializable {
@@ -18,13 +19,13 @@ public class ConnessioneServer implements Serializable {
 	String richiesta;
 	public Object obj;
 
-	public ConnessioneServer(String richiesta, Object obj) throws IOException {
+	/*public ConnessioneServer(String richiesta, Object obj) throws IOException {
 		
 		oout = new ObjectOutputStream(socket.getOutputStream());
 		oin = new ObjectInputStream(socket.getInputStream());
 		this.richiesta = richiesta;
 		this.obj =obj;
-	}
+	}*/
 	
 public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOException {
 		this.socket = socket;
@@ -62,7 +63,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 			e.printStackTrace();
 			return false;
 		}
-	
+		
 		
 		return true;
 	}
@@ -75,19 +76,18 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 		try {
 			ConnessioneServer return_cs =  (ConnessioneServer) oin.readObject();
 			System.out.println("La risposta del server per la richiesta di  :"+return_cs.getRichiesta());
-			
 	    	
 	    	switch(return_cs.getRichiesta()) {
 	    	case "LogIn" :
 	    		Boolean logIn_result = (Boolean) return_cs.getObj();
 	    		CittadiniForm.LogIn_Result((Boolean) return_cs.getObj());
 	    	}
-	    	
+	    	socket.close();
 		} catch (ClassNotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
 		}
-    	
+		
     	
 	}
 	
@@ -99,7 +99,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 			oout.writeObject(cs);
 			
 			cvlis = (ArrayList<CentroVaccinale>) oin.readObject();
-		
+			socket.close();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			

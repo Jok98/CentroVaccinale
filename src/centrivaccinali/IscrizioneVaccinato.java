@@ -16,6 +16,7 @@ import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
@@ -112,7 +113,8 @@ public class IscrizioneVaccinato extends JFrame {
 		btnRicercaCentriVax.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					ConnessioneServer cs = new ConnessioneServer("srcCentroVax", tfRicercaCentriVax.getText());
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"srcCentroVax", tfRicercaCentriVax.getText());
 					
 					src_result =cs.cercaCentroVaccinale(cs);
 					String[] centroVax_nome = new String[src_result.size()]  ;
@@ -159,7 +161,10 @@ public class IscrizioneVaccinato extends JFrame {
 				//int indx = listCentriVax.getSelectedIndex();
 				//src_result.get(listCentriVax.getSelectedIndex()).getInfo();
 				//System.out.println("Informazione del Centro vaccinale : "+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
+				String centrovax_selected=src_result.get(listCentriVax.getSelectedIndex()).getNome();
 				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
+				
+				tfCentroVaxSelezionato.setText(centrovax_selected);
 			}
 		});
 		btnSelezionaCentroVax.setBounds(341, 120, 163, 23);
@@ -281,16 +286,14 @@ public class IscrizioneVaccinato extends JFrame {
 				}
 		        java.sql.Date sql = new java.sql.Date(parsed.getTime());
 			    
-				/*user = new Utente(tfCentroVaxSelezionato.getText(), tfNomeVaccinato.getText(), 
-						tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
-						(String)cbVax.getSelectedItem() ,tfID.getText());*/
-				//ConnessioneServer cs = new ConnessioneServer();
-		        user = new Utente("jo", tfNomeVaccinato.getText(), 
+		
+		        user = new Utente(tfCentroVaxSelezionato.getText(), tfNomeVaccinato.getText(), 
 						tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
 						(String)cbVax.getSelectedItem() ,tfID.getText());
 				try {
 					//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
-					ConnessioneServer cs = new ConnessioneServer("registrazioneVaccinato", user);
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"registrazioneVaccinato", user);
 					
 					System.out.println(ConnessioneServer.richiestaServer(cs));
 				} catch (IOException | ClassNotFoundException e1) {
@@ -316,8 +319,6 @@ public class IscrizioneVaccinato extends JFrame {
 		btnBack.setBounds(10, 464, 89, 23);
 		contentPane.add(btnBack);
 		//
-		
-
-		
+	
 	}
 }

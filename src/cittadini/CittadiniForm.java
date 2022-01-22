@@ -17,6 +17,7 @@ import java.awt.Label;
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
@@ -82,7 +83,8 @@ public class CittadiniForm {
 				
 				//System.out.println(datiLogIn.get("Password"));
 				try {
-					ConnessioneServer cs = new ConnessioneServer("LogIn", datiLogIn);
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"LogIn", datiLogIn);
 					System.out.println(ConnessioneServer.richiestaServer(cs));
 				} catch (IOException | ClassNotFoundException e1) {
 					
@@ -148,7 +150,8 @@ public class CittadiniForm {
 			public void actionPerformed(ActionEvent e) {
 				if(!tfRicercaNome.getText().isEmpty()&tfRicercaComune.getText().isEmpty()&comboBox.getSelectedIndex()==0) {
 					try {
-						ConnessioneServer cs = new ConnessioneServer("srcCentroVax", tfRicercaNome.getText());
+						Socket socket = CentriVaccinali.openSocket();
+						ConnessioneServer cs = new ConnessioneServer(socket,"srcCentroVax", tfRicercaNome.getText());
 						System.out.println(ConnessioneServer.richiestaServer(cs));
 					} catch (IOException | ClassNotFoundException e1) {
 					
@@ -160,7 +163,8 @@ public class CittadiniForm {
 				if(tfRicercaNome.getText().isEmpty()&!tfRicercaComune.getText().isEmpty()&comboBox.getSelectedIndex()>=1) {
 					try {
 						String[] dati_ricerca = {tfRicercaComune.getText(),(String) comboBox.getSelectedItem()};
-						ConnessioneServer cs = new ConnessioneServer("ricercaCVComuneTipologia", dati_ricerca);
+						Socket socket = CentriVaccinali.openSocket();
+						ConnessioneServer cs = new ConnessioneServer(socket,"ricercaCVComuneTipologia", dati_ricerca);
 						System.out.println(ConnessioneServer.richiestaServer(cs));
 					} catch (IOException | ClassNotFoundException e1) {
 						
