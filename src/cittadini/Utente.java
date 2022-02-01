@@ -5,29 +5,56 @@ import java.sql.Date;
 
 public class Utente implements Serializable {
 	private static final long serialVersionUID = 253842189L;
-	String nomecvacc, nome, cognome, codfisc,  vacc, idvacc;
+	String nomecvacc, nome, cognome, codfisc, email, userID, password, vacc;
 	Date datavacc;
-	
-	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc, String idvacc) {
+	int idvax;
+	/**
+	 * Costruttore usato dalla classe Iscrizione vaccinato
+	 * @param nomecvacc
+	 * @param nome
+	 * @param cognome
+	 * @param codfisc
+	 * @param datavacc
+	 * @param vacc
+	 * @param idvacc
+	 * 
+	 */
+	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc, int idvax) {
 		this.nomecvacc= nomecvacc;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codfisc = codfisc;
 		this.datavacc = datavacc;
 		this.vacc = vacc;
-		this.idvacc = idvacc;
+		this.idvax = idvax;
 	}
 	
+	/**
+	 * Costruttore usato dalla classe registrazione per registrare un cittadino
+	 * @param nomecvacc
+	 * @param nome
+	 * @param cognome
+	 * @param codfisc
+	 * @param datavacc
+	 * @param vacc
+	 */
 	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc) {
-		this.nomecvacc= nomecvacc;
+
+		
+
+	}
+	
+	public Utente(String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codfisc = codfisc;
-		this.datavacc = datavacc;
-		this.vacc = vacc;
+		this.email = email;
+		this.userID = userID;
+		this.password = password;
+		this.idvax = idvax;
 	}
-	
-	public String getCvacc() {
+
+	public String getCentroVax() {
 		return this.nomecvacc;
 	}
 	
@@ -46,8 +73,18 @@ public class Utente implements Serializable {
 	public String getVacc() {
 		return this.vacc;
 	}
-	public String getIdvacc() {
-		return this.idvacc;
+	public int getIdvax() {
+		return this.idvax;
+	}
+	public String getEmail() {
+		return this.email;
+	}
+	public String getUserID() {
+		return this.userID;
+	}
+	public String getPassword() {
+		return this.password;
+		
 	}
 	
 

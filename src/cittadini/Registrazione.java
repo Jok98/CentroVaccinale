@@ -3,12 +3,17 @@ package cittadini;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
+import centrivaccinali.CentriVaccinali;
+import centrivaccinali.ConnessioneServer;
 
 public class Registrazione {
 
@@ -117,6 +122,23 @@ public class Registrazione {
 		tfIDUnivocoVax.setColumns(10);
 		
 		JButton btnRegistra = new JButton("Registrati");
+		btnRegistra.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String password = String.valueOf(passwordField.getPassword());
+				Utente user = new Utente(tfNome.getText(), tfCognome.getText(), tfCodiceFiscale.getText(), tfEmail.getText(),
+						tfUserID.getText(), password, Integer.valueOf(tfIDUnivocoVax.getText()));
+				try {
+					//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
+					Socket socket = CentriVaccinali.openSocket();
+					ConnessioneServer cs = new ConnessioneServer(socket,"registrazioneCittadino", user);
+					
+					System.out.println(ConnessioneServer.richiestaServer(cs));
+				} catch (IOException | ClassNotFoundException e1) {
+					
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnRegistra.setBounds(174, 248, 89, 23);
 		frame.getContentPane().add(btnRegistra);
 		

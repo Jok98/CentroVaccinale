@@ -16,7 +16,9 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.awt.event.ActionEvent;
 
 public class AccessoAutenticato {
@@ -24,9 +26,8 @@ public class AccessoAutenticato {
 	public JFrame frmInvioDatiEventi;
 	public static AccessoAutenticato window = new AccessoAutenticato();
 	private JTable tblEventiAvversi;
-	private JTextField tfCentroVax;
-	
-	private HashMap<String, Integer> Eventiavversi = new HashMap<>();
+	static JTextField tfCentroVax;
+	private ArrayList<Object> Eventi_Avversi = new ArrayList<Object>();
 	/**
 	 * Launch the application.
 	 */
@@ -62,26 +63,32 @@ public class AccessoAutenticato {
 		frmInvioDatiEventi.getContentPane().setLayout(null);
 		
 		tblEventiAvversi = new JTable();
+		tblEventiAvversi.setSurrendersFocusOnKeystroke(true);
 		tblEventiAvversi.setRowSelectionAllowed(false);
 		tblEventiAvversi.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"Mal di testa", null},
-				{"Febbre", null},
-				{"Dolori muscolari e articolari", null},
-				{"Linfoadenopatia", null},
-				{"Tachicardia", null},
-				{"Crisi ipertensiva", null},
-				{"Note aggiuntive", null},
+				{"Mal di testa", null, null},
+				{"Febbre", null, null},
+				{"Dolori muscolari e articolari", null, null},
+				{"Linfoadenopatia", null, null},
+				{"Tachicardia", null, null},
+				{"Crisi ipertensiva", null, null},
 			},
 			new String[] {
-				"EventoAvverso", "Severita"
+				"EventoAvverso", "Severita", "Note Aggiuntive"
 			}
 		) {
 			Class[] columnTypes = new Class[] {
-				String.class, Integer.class
+				String.class, Integer.class, String.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, true, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
 			}
 		});
 		tblEventiAvversi.getColumnModel().getColumn(0).setResizable(false);
@@ -89,7 +96,10 @@ public class AccessoAutenticato {
 		tblEventiAvversi.getColumnModel().getColumn(0).setMinWidth(100);
 		tblEventiAvversi.getColumnModel().getColumn(1).setResizable(false);
 		tblEventiAvversi.getColumnModel().getColumn(1).setPreferredWidth(35);
-		tblEventiAvversi.setBounds(10, 70, 587, 112);
+		tblEventiAvversi.getColumnModel().getColumn(2).setResizable(false);
+		tblEventiAvversi.getColumnModel().getColumn(2).setPreferredWidth(200);
+		tblEventiAvversi.getColumnModel().getColumn(2).setMinWidth(200);
+		tblEventiAvversi.setBounds(10, 70, 587, 96);
 		frmInvioDatiEventi.getContentPane().add(tblEventiAvversi);
 		
 		JSeparator separator = new JSeparator();
@@ -101,6 +111,7 @@ public class AccessoAutenticato {
 		tfCentroVax.setBounds(341, 7, 270, 20);
 		frmInvioDatiEventi.getContentPane().add(tfCentroVax);
 		tfCentroVax.setColumns(10);
+		
 		
 		JLabel lblCentroVax = new JLabel("Centro vaccinale dove \u00E8 stata eseguita la vaccinazione :");
 		lblCentroVax.setBounds(10, 10, 321, 14);
@@ -115,17 +126,21 @@ public class AccessoAutenticato {
 		 */
 			public void actionPerformed(ActionEvent e) {
 				System.out.println((String) tblEventiAvversi.getModel().getValueAt(0, 0));
-				for(int i =0 ; i<6; i++) {	
-					Eventiavversi.put((String) tblEventiAvversi.getModel().getValueAt(i, 0),  (Integer) tblEventiAvversi.getModel().getValueAt(i, 1)) ;
+				
+				Eventi_Avversi.add(tfCentroVax.getText());
+				for(int i =0 ; i<=5; i++) {
+					Eventi_Avversi.add((Integer)tblEventiAvversi.getModel().getValueAt(i, 1));
+					Eventi_Avversi.add((String)tblEventiAvversi.getModel().getValueAt(i, 2));
 				}
 				try {
 					Socket socket = CentriVaccinali.openSocket();
-					ConnessioneServer cs = new ConnessioneServer(socket,"eventiAvversi", Eventiavversi);
+					ConnessioneServer cs = new ConnessioneServer(socket,"eventiAvversi", Eventi_Avversi);
 					System.out.println(ConnessioneServer.richiestaServer(cs));
 				} catch (IOException | ClassNotFoundException e1) {
 					
 					e1.printStackTrace();
 				}
+				Eventi_Avversi.clear();
 				//System.out.println(Eventiavversi);
 			}
 		});

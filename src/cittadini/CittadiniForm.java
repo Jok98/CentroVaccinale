@@ -41,6 +41,7 @@ public class CittadiniForm {
 	private JTextField tfID;
 	private JPasswordField passwordField;
 	private ArrayList<CentroVaccinale> src_result;
+	static String nome_Centro_Vax;
 	/**
 	 * Launch the application.
 	 */
@@ -227,6 +228,7 @@ public class CittadiniForm {
 		JButton btnShowResult = new JButton("Mostra dati");
 		btnShowResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				nome_Centro_Vax = src_result.get(listCentriVax.getSelectedIndex()).getNome();
 				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
 			}
 		});
@@ -272,6 +274,7 @@ public class CittadiniForm {
 		if(result==true) {
 			AccessConf.frmInvioDatiEventi.setVisible(true);
 			frmCittadini.setVisible(false);
+			AccessConf.tfCentroVax.setText(nome_Centro_Vax);
 		}else {
 			showMessageDialog(null,"Dati logIn errati");
 		}

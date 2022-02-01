@@ -289,7 +289,7 @@ public class IscrizioneVaccinato extends JFrame {
 		
 		        user = new Utente(tfCentroVaxSelezionato.getText(), tfNomeVaccinato.getText(), 
 						tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
-						(String)cbVax.getSelectedItem() ,tfID.getText());
+						(String)cbVax.getSelectedItem() , Integer.valueOf(tfID.getText()) );
 				try {
 					//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
 					Socket socket = CentriVaccinali.openSocket();
