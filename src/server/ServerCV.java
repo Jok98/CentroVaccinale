@@ -92,7 +92,7 @@ public void run() {
     	
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
-    	System.out.println("La richiesta è : " +cs.getRichiesta());
+    	System.out.println("La richiesta ï¿½ : " +cs.getRichiesta());
     	switch(cs.getRichiesta()) {
     		
     	case "centroVax" :
@@ -146,7 +146,7 @@ public void run() {
     	case "LogIn":
     		datiLogIn = (HashMap<String, String>) cs.getObj();
     		Boolean logIn_result = loginCittadino(conn, datiLogIn);
-    		//TODO inserire come parametro logIn_result al posto di true dopo che si è verificata che l'interazione col db sia corretta
+    		//TODO inserire come parametro logIn_result al posto di true dopo che si ï¿½ verificata che l'interazione col db sia corretta
     		cs.setObj(logIn_result);
     		cs.getObj();
     		oout.writeObject(cs);
@@ -205,8 +205,9 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 	 }
 
 public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale cv) {
-
-		String state = "INSERT INTO centrivaccinali (siglaprov,numciv,cap,comune,nome,indirizzo,tipologia)"+ "VALUES (?,?,?,?,?,?,?)";
+	String create_table_query = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(20),indirizzo varchar(30),tipologia varchar(20))";
+	createTable(conn,create_table_query);
+	String state = "INSERT INTO centrivaccinali (siglaprov,numciv,cap,comune,nome,indirizzo,tipologia)"+ "VALUES (?,?,?,?,?,?,?)";
 		try {
 			
 			PreparedStatement statement = conn.prepareStatement(state);	
@@ -348,7 +349,13 @@ public static  boolean registraCittadino(Connection conn, Utente user) {
 		return false ;
 	} 
 	else {*/
-		
+	Boolean successo = true ;
+	successo = checkidandcv(conn, user.getCentroVax(), user.getCodfisc(), user.getIdvax());
+	if (successo == false) {
+		System.out.println("Nome cv o id univoco non corrispondono");
+		return false ;
+	} 
+	else {	
 		String stmt = "INSERT INTO cittadini_registrati (nome,cognome,codfisc,email,userid,password,id)"+ "VALUES (?,?,?,?,?,?,?)";
 		try {
 			PreparedStatement statement = conn.prepareStatement(stmt);
@@ -364,8 +371,24 @@ public static  boolean registraCittadino(Connection conn, Utente user) {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
+	}
 	return true;
+}
+
+public static boolean checkidandcv(Connection conn,String nomecvacc,String codfisc, int iduniv) {
+	 String query = "SELECT * FROM vaccinati_" + nomecvacc +" WHERE codfisc = ? AND user_id = ?";
+	 try {
+			PreparedStatement statement = conn.prepareStatement(query);		
+			statement.setString(1, codfisc);
+			statement.setInt(2, iduniv);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next() == false) { 
+				return false;
+			}
+			} catch (SQLException a) {
+				a.printStackTrace();
+			}
+	 return true ;
 }
 
 

@@ -1,0 +1,10 @@
+- Id incrementale 16 bit
+
+- Implementare 3 slot per la data durante l'iscrizione del vaccinato
+- Integrazione della funzione : checkidandcv
+- Selezionare centro vax prima della registrazione cittadino
+- TOGLIERE ID UNIVOCO NELLA REGISTRAZIONE VACCINATO
+
+Da risolvere :
+- registrazione centri vaccinali identici
+- registrazione  vaccinati identici
