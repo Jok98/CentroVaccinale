@@ -25,6 +25,7 @@ public class Registrazione {
 	private JTextField tfUserID;
 	private JPasswordField passwordField;
 	private JTextField tfIDUnivocoVax;
+	static JTextField tf_NomeCentroVax;
 	/**
 	 * Launch the application.
 	 */
@@ -125,7 +126,7 @@ public class Registrazione {
 		btnRegistra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String password = String.valueOf(passwordField.getPassword());
-				Utente user = new Utente(tfNome.getText(), tfCognome.getText(), tfCodiceFiscale.getText(), tfEmail.getText(),
+				Utente user = new Utente(tf_NomeCentroVax.getText(),tfNome.getText(), tfCognome.getText(), tfCodiceFiscale.getText(), tfEmail.getText(),
 						tfUserID.getText(), password, Integer.valueOf(tfIDUnivocoVax.getText()));
 				try {
 					//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
@@ -151,6 +152,23 @@ public class Registrazione {
 		});
 		btnBack.setBounds(10, 248, 89, 23);
 		frame.getContentPane().add(btnBack);
+		
+		/**
+		 * 
+		 */
+		JLabel lbl_CentroVax = new JLabel("Centro vaccinale selezionato :");
+		lbl_CentroVax.setBounds(10, 223, 150, 14);
+		frame.getContentPane().add(lbl_CentroVax);
+		
+		/**
+		 * 
+		 */
+		tf_NomeCentroVax = new JTextField();
+		tf_NomeCentroVax.setEditable(false);
+		tf_NomeCentroVax.setBounds(174, 220, 250, 20);
+		frame.getContentPane().add(tf_NomeCentroVax);
+		tf_NomeCentroVax.setColumns(10);
+		//
 	}
-
 }
+

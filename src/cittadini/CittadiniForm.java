@@ -42,6 +42,7 @@ public class CittadiniForm {
 	private JPasswordField passwordField;
 	private ArrayList<CentroVaccinale> src_result;
 	static String nome_Centro_Vax;
+	private JTextField tf_NomeCentroVax;
 	/**
 	 * Launch the application.
 	 */
@@ -107,6 +108,7 @@ public class CittadiniForm {
 		btnRegistrazione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Registrazione.frame.setVisible(true);
+				Registrazione.tf_NomeCentroVax.setText(nome_Centro_Vax);
 				frmCittadini.setVisible(false);
 			}
 		});
@@ -229,10 +231,11 @@ public class CittadiniForm {
 		btnShowResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nome_Centro_Vax = src_result.get(listCentriVax.getSelectedIndex()).getNome();
+				tf_NomeCentroVax.setText(nome_Centro_Vax);
 				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
 			}
 		});
-		btnShowResult.setBounds(195, 355, 110, 23);
+		btnShowResult.setBounds(439, 356, 110, 23);
 		frmCittadini.getContentPane().add(btnShowResult);
 		
 		JSeparator separator = new JSeparator();
@@ -267,6 +270,15 @@ public class CittadiniForm {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(348, 441, 86, 20);
 		frmCittadini.getContentPane().add(passwordField);
+		
+		JLabel lbl_CentroVax = new JLabel("Centro vaccinale selezionato : ");
+		lbl_CentroVax.setBounds(10, 360, 188, 14);
+		frmCittadini.getContentPane().add(lbl_CentroVax);
+		
+		tf_NomeCentroVax = new JTextField();
+		tf_NomeCentroVax.setBounds(208, 356, 226, 20);
+		frmCittadini.getContentPane().add(tf_NomeCentroVax);
+		tf_NomeCentroVax.setColumns(10);
 	}
 	
 	public static void LogIn_Result(Boolean result) {

@@ -44,7 +44,8 @@ public class Utente implements Serializable {
 
 	}
 	
-	public Utente(String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
+	public Utente(String nomecvacc,String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
+		this.nomecvacc= nomecvacc;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codfisc = codfisc;
