@@ -63,6 +63,10 @@ public static void main(String[] args) throws IOException, SQLException {
 	        new ServerThread(socket);
 	        boolean connesso = s.isBound();
 	        System.out.println(connesso);
+	        
+	        String create_table_query = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
+	        		+ "codfisc varchar(16),email varchar(30),userid varchar(16),password varchar(30),id varchar(20))";
+	    	createTable(conn,create_table_query);
 	    }
 	    } finally {
 	      s.close();
@@ -351,6 +355,7 @@ public static  boolean registraCittadino(Connection conn, Utente user) {
 	else {*/
 	Boolean successo = true ;
 	successo = checkidandcv(conn, user.getCentroVax(), user.getCodfisc(), user.getIdvax());
+
 	if (successo == false) {
 		System.out.println("Nome cv o id univoco non corrispondono");
 		return false ;
