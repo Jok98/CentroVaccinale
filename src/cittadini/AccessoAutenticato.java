@@ -132,6 +132,7 @@ public class AccessoAutenticato {
 					Eventi_Avversi.add((Integer)tblEventiAvversi.getModel().getValueAt(i, 1));
 					Eventi_Avversi.add((String)tblEventiAvversi.getModel().getValueAt(i, 2));
 				}
+				System.out.println(Eventi_Avversi);
 				try {
 					Socket socket = CentriVaccinali.openSocket();
 					ConnessioneServer cs = new ConnessioneServer(socket,"eventiAvversi", Eventi_Avversi);

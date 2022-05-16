@@ -286,14 +286,14 @@ public static  boolean createTable(Connection conn, String create_table_query) {
 
 public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> Eventi_Avversi) {
 	String centroVax = (String) Eventi_Avversi.get(0);
-	String create_table_query = "CREATE TABLE IF NOT EXISTS Centro_"+centroVax+"_eventi_avversi(mal_di_testa INTEGER, note_mal_di_testa varchar(256),"
+	String create_table_query = "CREATE TABLE IF NOT EXISTS Centro_"+centroVax+"_eventi_avversi (mal_di_testa INTEGER, note_mal_di_testa varchar(256),"
 			+ " febbre INTEGER, note_febbre varchar(256), dolori_muscolari INTEGER, note_dolori_muscolari varchar(256),"
 			+ " linfoadenopatia INTEGER, note_linfoadenopatia varchar(256), tachicardia INTEGER, note_tachicardia varchar(256), crisi_ipertensiva INTEGER, note_crisi_ipertensiva varchar(256) )";
 	
 	String nome_tab ="Centro_"+centroVax+"eventi_avversi";
 	
 	createTable(conn,create_table_query);
-	String upd = "INSERT INTO eventi_avversi ( mal_di_testa , note_mal_di_testa , febbre, note_febbre, dolori_muscolari,"
+	String upd = "INSERT INTO Centro_"+centroVax+"_eventi_avversi ( mal_di_testa , note_mal_di_testa , febbre, note_febbre, dolori_muscolari,"
 			+ " note_dolori_muscolari, linfoadenopatia, note_linfoadenopatia,tachicardia, note_tachicardia ,"
 			+ " crisi_ipertensiva, note_crisi_ipertensiva) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	try {

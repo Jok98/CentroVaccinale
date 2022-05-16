@@ -84,21 +84,25 @@ public class CittadiniForm {
 		btnLogIn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				HashMap <String, String> datiLogIn = new HashMap <String, String>();
-				datiLogIn.put("ID", tfID.getText());	
-				datiLogIn.put("Password", String.valueOf(passwordField.getPassword()));
+				if(tf_NomeCentroVax.getText().isEmpty()) {
+					showMessageDialog(null,"Selezionare il centro in cui si è stati vaccinati");
+				}else {
+					HashMap <String, String> datiLogIn = new HashMap <String, String>();
+					datiLogIn.put("ID", tfID.getText());	
+					datiLogIn.put("Password", String.valueOf(passwordField.getPassword()));
 				
-				//System.out.println(datiLogIn.get("Password"));
-				try {
-					Socket socket = CentriVaccinali.openSocket();
-					ConnessioneServer cs = new ConnessioneServer(socket,"LogIn", datiLogIn);
-					System.out.println(ConnessioneServer.richiestaServer(cs));
-				} catch (IOException | ClassNotFoundException e1) {
+					//System.out.println(datiLogIn.get("Password"));
+					try {
+						Socket socket = CentriVaccinali.openSocket();
+						ConnessioneServer cs = new ConnessioneServer(socket,"LogIn", datiLogIn);
+						System.out.println(ConnessioneServer.richiestaServer(cs));
+					} catch (IOException | ClassNotFoundException e1) {
 					
-					e1.printStackTrace();
-				}
+						e1.printStackTrace();
+					}
 				//AccessConf.frmInvioDatiEventi.setVisible(true);
 				//frmCittadini.setVisible(false);
+				}
 			}
 		});
 		btnLogIn.setBounds(460, 423, 89, 23);
@@ -107,9 +111,13 @@ public class CittadiniForm {
 		JButton btnRegistrazione = new JButton("Registrati");
 		btnRegistrazione.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(tf_NomeCentroVax.getText().isEmpty()) {
+					showMessageDialog(null,"Selezionare il centro in cui si è stati vaccinati");
+				}else {
 				Registrazione.frame.setVisible(true);
 				Registrazione.tf_NomeCentroVax.setText(nome_Centro_Vax);
 				frmCittadini.setVisible(false);
+				}
 			}
 		});
 		btnRegistrazione.setBounds(109, 440, 89, 23);
