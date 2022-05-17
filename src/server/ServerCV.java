@@ -53,8 +53,7 @@ public static void main(String[] args) throws IOException, SQLException {
 	    ServerSocket s = new ServerSocket(PORT);  
 	    conn = connect();
 	    System.out.println("Server started");
-	    //System.out.println(s.getLocalSocketAddress());
-	    //String create_centri_vax_table = 
+
 	    
 	   
 	    try {
@@ -64,9 +63,14 @@ public static void main(String[] args) throws IOException, SQLException {
 	        boolean connesso = s.isBound();
 	        System.out.println(connesso);
 	        
-	        String create_table_query = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
-	        		+ "codfisc varchar(16),email varchar(30),userid varchar(16),password varchar(30),id varchar(20))";
-	    	createTable(conn,create_table_query);
+	        String create_table_centro = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(20) PRIMARY KEY,"
+	        		+ "indirizzo varchar(30),tipologia varchar(20), severita_media int, n_segnalazioni int )";
+	    	createTable(conn,create_table_centro);
+	        
+	        String create_table_cittadini = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
+	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20))";
+	    	createTable(conn,create_table_cittadini);
+	    	
 	    }
 	    } finally {
 	      s.close();
@@ -150,7 +154,6 @@ public void run() {
     	case "LogIn":
     		datiLogIn = (HashMap<String, String>) cs.getObj();
     		Boolean logIn_result = loginCittadino(conn, datiLogIn);
-    		//TODO inserire come parametro logIn_result al posto di true dopo che si � verificata che l'interazione col db sia corretta
     		cs.setObj(logIn_result);
     		cs.getObj();
     		oout.writeObject(cs);
@@ -209,8 +212,7 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 	 }
 
 public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale cv) {
-	String create_table_query = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(20),indirizzo varchar(30),tipologia varchar(20))";
-	createTable(conn,create_table_query);
+
 	String state = "INSERT INTO centrivaccinali (siglaprov,numciv,cap,comune,nome,indirizzo,tipologia)"+ "VALUES (?,?,?,?,?,?,?)";
 		try {
 			
@@ -286,29 +288,60 @@ public static  boolean createTable(Connection conn, String create_table_query) {
 
 public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> Eventi_Avversi) {
 	String centroVax = (String) Eventi_Avversi.get(0);
-	String create_table_query = "CREATE TABLE IF NOT EXISTS Centro_"+centroVax+"_eventi_avversi (mal_di_testa INTEGER, note_mal_di_testa varchar(256),"
+	String create_table_query = "CREATE TABLE IF NOT EXISTS "+centroVax+"_eventi_avversi (mal_di_testa INTEGER, note_mal_di_testa varchar(256),"
 			+ " febbre INTEGER, note_febbre varchar(256), dolori_muscolari INTEGER, note_dolori_muscolari varchar(256),"
 			+ " linfoadenopatia INTEGER, note_linfoadenopatia varchar(256), tachicardia INTEGER, note_tachicardia varchar(256), crisi_ipertensiva INTEGER, note_crisi_ipertensiva varchar(256) )";
 	
-	String nome_tab ="Centro_"+centroVax+"eventi_avversi";
-	
 	createTable(conn,create_table_query);
-	String upd = "INSERT INTO Centro_"+centroVax+"_eventi_avversi ( mal_di_testa , note_mal_di_testa , febbre, note_febbre, dolori_muscolari,"
+	
+	String upd = "INSERT INTO "+centroVax+"_eventi_avversi ( mal_di_testa , note_mal_di_testa , febbre, note_febbre, dolori_muscolari,"
 			+ " note_dolori_muscolari, linfoadenopatia, note_linfoadenopatia,tachicardia, note_tachicardia ,"
 			+ " crisi_ipertensiva, note_crisi_ipertensiva) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	try {
 		PreparedStatement statement = conn.prepareStatement(upd);
+		int somma_ev_av = 0;
 		for (int i = 1 ; i < 13; i++) {
-			if(i%2!=0)statement.setInt(i, (int) Eventi_Avversi.get(i));
-			else statement.setString(i, (String) Eventi_Avversi.get(i));
+			if(i%2!=0) {
+				somma_ev_av += (int) Eventi_Avversi.get(i);
+				statement.setInt(i, (int) Eventi_Avversi.get(i) );
+				
+			}else statement.setString(i, (String) Eventi_Avversi.get(i));
 		}
-		
 		statement.executeUpdate();
+		//statement.close();
+		int sev_media_att = somma_ev_av/6;
+
+		updateEventiAvversi(centroVax,sev_media_att);
 	} catch (SQLException e) {
 		e.printStackTrace();
 		return false;
 	}
 	return true;
+}
+
+public static void updateEventiAvversi(String centroVax, int sev_media_att) {
+	int sevMediaPrec = 0;
+	int nEvAvPrec = 0;
+	String query = "SELECT severita_media, n_segnalazioni FROM centrivaccinali WHERE nome=?" ;
+	try {
+		PreparedStatement statement = conn.prepareStatement(query);
+		statement.setString(1, centroVax);
+		ResultSet rs = statement.executeQuery();
+		rs.next();
+		sevMediaPrec = rs.getInt(1);
+		nEvAvPrec = rs.getInt(2);
+		int nEvAv = nEvAvPrec+1;
+		int sev_media_tot = (sev_media_att+sevMediaPrec)/nEvAv;
+		statement = conn.prepareStatement("UPDATE centrivaccinali SET severita_media = ?, n_segnalazioni = ? WHERE nome = ?;");
+		statement.setInt(1, sev_media_tot);
+		statement.setInt(2, nEvAv);
+		statement.setString(3, centroVax);
+		statement.executeUpdate();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+
+	
 }
 
 
@@ -332,27 +365,7 @@ public static boolean loginCittadino(Connection conn,HashMap <String, String> da
 }
 
 public static  boolean registraCittadino(Connection conn, Utente user) {
-	/*
-	Boolean errore = false ;
-	String nomecvacc = user.getNome();
-	String query = "SELECT * FROM vaccinati_"+nomecvacc+" WHERE nome=? AND cognome=? AND codfisc=? AND user_id=? ";
-	try {
-	PreparedStatement statement = conn.prepareStatement(query);		
-	statement.setString(1, user.getNome());
-	statement.setString(2, user.getCognome());
-	statement.setString(3, user.getCodfisc());
-	statement.setInt(4, user.getIdvax());
-	ResultSet rs = statement.executeQuery();
-	if (rs.next() == false) { 
-		errore = true ;
-	}
-	} catch (SQLException a) {
-		a.printStackTrace();
-	}
-	if (errore == true) {
-		return false ;
-	} 
-	else {*/
+
 	Boolean successo = true ;
 	successo = checkidandcv(conn, user.getCentroVax(), user.getCodfisc(), user.getIdvax());
 
