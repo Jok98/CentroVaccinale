@@ -300,7 +300,8 @@ public class IscrizioneVaccinato extends JFrame {
 					
 					e1.printStackTrace();
 				}
-				
+				OperatoriForm.window.frmAppOperatori.setVisible(true);
+				frame.dispose();
 			}
 		});
 		btnRegistra.setBounds(168, 464, 89, 23);

@@ -26,6 +26,7 @@ public class Registrazione {
 	private JPasswordField passwordField;
 	private JTextField tfIDUnivocoVax;
 	static JTextField tf_NomeCentroVax;
+	static Registrazione window;
 	/**
 	 * Launch the application.
 	 */
@@ -33,7 +34,7 @@ public class Registrazione {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Registrazione window = new Registrazione();
+					window = new Registrazione();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -138,6 +139,8 @@ public class Registrazione {
 					
 					e1.printStackTrace();
 				}
+				CittadiniForm.frmCittadini.setVisible(true);
+				frame.dispose();
 			}
 		});
 		btnRegistra.setBounds(174, 248, 89, 23);
@@ -145,6 +148,7 @@ public class Registrazione {
 		
 		JButton btnBack = new JButton("Indietro");
 		btnBack.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
 				CittadiniForm.frmCittadini.setVisible(true);
 				frame.dispose();

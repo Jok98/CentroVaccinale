@@ -186,11 +186,10 @@ public class IscrizioneCentroVax extends JFrame {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				
-				//creare nuova istanza locale nel caso in cui non funzionasse
 				CV = new CentroVaccinale(tfNomeCentroVax.getText(), tfIndirizzoCentroVax.getText(), Integer.valueOf(tfNCivico.getText()), 
 						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem());
 				
-				System.out.println(CV.tipologia);	
+				//System.out.println(CV.tipologia);	
 				
 				try {
 					Socket socket = CentriVaccinali.openSocket();
@@ -200,8 +199,8 @@ public class IscrizioneCentroVax extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-
+				OperatoriForm.window.frmAppOperatori.setVisible(true);
+				frame.dispose();
 			}
 		});
 		btnRegistra.setBounds(164, 273, 89, 23);

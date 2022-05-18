@@ -142,6 +142,9 @@ public class AccessoAutenticato {
 					e1.printStackTrace();
 				}
 				Eventi_Avversi.clear();
+				//frmInvioDatiEventi.setVisible(false);
+				CittadiniForm.frmCittadini.setVisible(true);
+				frmInvioDatiEventi.dispose();
 				//System.out.println(Eventiavversi);
 			}
 		});

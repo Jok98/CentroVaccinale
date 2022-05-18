@@ -299,19 +299,21 @@ public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> 
 			+ " crisi_ipertensiva, note_crisi_ipertensiva) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 	try {
 		PreparedStatement statement = conn.prepareStatement(upd);
-		int somma_ev_av = 0;
+		int somma_ev_av = 0 ;
 		for (int i = 1 ; i < 13; i++) {
 			if(i%2!=0) {
-				somma_ev_av += (int) Eventi_Avversi.get(i);
+				somma_ev_av = (int) Eventi_Avversi.get(i)+somma_ev_av;
 				statement.setInt(i, (int) Eventi_Avversi.get(i) );
 				
 			}else statement.setString(i, (String) Eventi_Avversi.get(i));
 		}
-		statement.executeUpdate();
-		//statement.close();
+		
 		int sev_media_att = somma_ev_av/6;
+		System.out.println(sev_media_att);
 
 		updateEventiAvversi(centroVax,sev_media_att);
+		statement.executeUpdate();
+		statement.close();
 	} catch (SQLException e) {
 		e.printStackTrace();
 		return false;
@@ -320,23 +322,24 @@ public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> 
 }
 
 public static void updateEventiAvversi(String centroVax, int sev_media_att) {
-	int sevMediaPrec = 0;
-	int nEvAvPrec = 0;
+	 
+	 
 	String query = "SELECT severita_media, n_segnalazioni FROM centrivaccinali WHERE nome=?" ;
 	try {
 		PreparedStatement statement = conn.prepareStatement(query);
 		statement.setString(1, centroVax);
 		ResultSet rs = statement.executeQuery();
 		rs.next();
-		sevMediaPrec = rs.getInt(1);
-		nEvAvPrec = rs.getInt(2);
+		int sevMediaPrec = rs.getInt(1);
+		int nEvAvPrec = rs.getInt(2);
 		int nEvAv = nEvAvPrec+1;
-		int sev_media_tot = (sev_media_att+sevMediaPrec)/nEvAv;
+		int sev_media_tot = (sev_media_att+sevMediaPrec)/2;
 		statement = conn.prepareStatement("UPDATE centrivaccinali SET severita_media = ?, n_segnalazioni = ? WHERE nome = ?;");
 		statement.setInt(1, sev_media_tot);
 		statement.setInt(2, nEvAv);
 		statement.setString(3, centroVax);
 		statement.executeUpdate();
+		statement.close();
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
@@ -347,6 +350,7 @@ public static void updateEventiAvversi(String centroVax, int sev_media_att) {
 
 public static boolean loginCittadino(Connection conn,HashMap <String, String> datiLogIn) {
 
+	//bisogna controllare il centro vax dell'utente
 	String query = "SELECT userid,password FROM cittadini_registrati WHERE userid=? AND password=?" ;
 	try {
 		PreparedStatement statement = conn.prepareStatement(query);
@@ -364,19 +368,24 @@ public static boolean loginCittadino(Connection conn,HashMap <String, String> da
 	return false;
 }
 
-public static  boolean registraCittadino(Connection conn, Utente user) {
+public static  boolean registraCittadino(Connection conn, Utente user) throws SQLException {
 
 	Boolean successo = true ;
-	successo = checkidandcv(conn, user.getCentroVax(), user.getCodfisc(), user.getIdvax());
+	String query = "SELECT * FROM vaccinati_" + user.getCentroVax() +" WHERE codfisc = ? AND user_id = ?";
+	PreparedStatement statement = conn.prepareStatement(query);		
+	statement.setString(1, user.getCodfisc());
+	statement.setInt(2, user.getIdvax());
+	
+	successo = checkUserData(conn, statement);
 
 	if (successo == false) {
-		System.out.println("Nome cv o id univoco non corrispondono");
+		System.out.println("Centro vaccinale o ID univoco non corrispondono");
 		return false ;
 	} 
 	else {	
 		String stmt = "INSERT INTO cittadini_registrati (nome,cognome,codfisc,email,userid,password,id)"+ "VALUES (?,?,?,?,?,?,?)";
 		try {
-			PreparedStatement statement = conn.prepareStatement(stmt);
+			statement = conn.prepareStatement(stmt);
 			statement.setString(1, user.getNome());
 			statement.setString(2, user.getCognome());
 			statement.setString(3, user.getCodfisc());
@@ -393,12 +402,9 @@ public static  boolean registraCittadino(Connection conn, Utente user) {
 	return true;
 }
 
-public static boolean checkidandcv(Connection conn,String nomecvacc,String codfisc, int iduniv) {
-	 String query = "SELECT * FROM vaccinati_" + nomecvacc +" WHERE codfisc = ? AND user_id = ?";
+public static boolean checkUserData(Connection conn, PreparedStatement statement) {
+	 
 	 try {
-			PreparedStatement statement = conn.prepareStatement(query);		
-			statement.setString(1, codfisc);
-			statement.setInt(2, iduniv);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next() == false) { 
 				return false;
