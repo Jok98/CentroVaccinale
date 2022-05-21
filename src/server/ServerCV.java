@@ -1,6 +1,5 @@
 package server;
 
-import java.sql.Statement;
 import java.io.*;
 import java.net.*;
 import java.sql.Connection;
@@ -10,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import centrivaccinali.*;
@@ -21,7 +19,7 @@ import cittadini.Utente;
 
 
 public class ServerCV {
-	private static final String url = "jdbc:postgresql://127.0.0.1/Lab B";
+	private static final String url = "jdbc:postgresql://127.0.0.1/Laboratorio";
 	private static final String user = "postgres";
 	private static final String password = "admin";
 	static Connection conn = null;
@@ -71,6 +69,9 @@ public static void main(String[] args) throws IOException, SQLException {
 	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20))";
 	    	createTable(conn,create_table_cittadini);
 	    	
+	    	String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 ";
+	    	createTable(conn,create_table_id);
+	
 	    }
 	    } finally {
 	      s.close();
@@ -85,8 +86,7 @@ public static void main(String[] args) throws IOException, SQLException {
       } catch (SQLException e) {
           System.out.println(e.getMessage());
       }
-	  
-	  
+
       return conn;
   }
 
@@ -100,7 +100,7 @@ public void run() {
     	
     	
     	ConnessioneServer cs =   (ConnessioneServer) oin.readObject();
-    	System.out.println("La richiesta � : " +cs.getRichiesta());
+    	System.out.println("La richiesta inviata dal client : " +cs.getRichiesta());
     	switch(cs.getRichiesta()) {
     		
     	case "centroVax" :
@@ -108,7 +108,13 @@ public void run() {
     		break;
     	
     	case "registrazioneVaccinato" :
-    		registraVaccinato(conn,(Utente) cs.getObj());
+    		int id = set_get_Id(conn);
+    		registraVaccinato(conn,(Utente) cs.getObj(), id);
+    		cs.setRichiesta("IdUnivoco");
+    		cs.setObj(id);
+    		cs.getObj();
+    		oout.writeObject(cs);
+    		System.out.println("id univoco del vaccinato : "+id);
     		break;
     		
     	case "registrazioneCittadino" :
@@ -147,13 +153,12 @@ public void run() {
     		Eventi_Avversi = (ArrayList<Object>) cs.getObj();
     		System.out.println("Eventi avversi ricevuti dal sever : "+Eventi_Avversi);
     		inserisciEventiAvversi(conn, Eventi_Avversi );
-    	
-    	
     		break;
     	
     	case "LogIn":
     		datiLogIn = (HashMap<String, String>) cs.getObj();
     		Boolean logIn_result = loginCittadino(conn, datiLogIn);
+    		cs.setRichiesta("LogIn");
     		cs.setObj(logIn_result);
     		cs.getObj();
     		oout.writeObject(cs);
@@ -171,6 +176,26 @@ public void run() {
 
 }
 
+public static int set_get_Id(Connection conn) {
+
+	int id = 0 ;
+	try {
+		String query = "SELECT nextval('idprog') FROM idprog";
+		PreparedStatement statement = conn.prepareStatement(query);
+		ResultSet rs = statement.executeQuery();
+		while (rs.next()) {
+		id = rs.getInt(1);
+		
+		}
+		
+		
+
+	} catch (SQLException e) {
+		e.printStackTrace();
+		return -1;
+	}
+	return id;
+}
 
 public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement statement) {
 	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>() ;
@@ -178,16 +203,6 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 	String nome,via,citta,prov,tip = null;
 	int CAP;
 	int nciv;
-	
-	try {
-		if(!conn.isValid(5)) {
-			System.out.println("Connessione col database non stabile o assente");
-		} else {
-			System.out.println("Connessione col database valida");
-		}
-		} catch (SQLException a) {
-		a.printStackTrace();
-		}
 	
 		try {
 			
@@ -234,27 +249,16 @@ public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale 
 	 }
 
 
-public static  boolean registraVaccinato(Connection conn, Utente utente) {
+public static  boolean registraVaccinato(Connection conn, Utente utente, int id) {
 
-	String create_table_query = "CREATE TABLE IF NOT EXISTS vaccinati_"+utente.getCentroVax()+"(user_id SERIAL NOT NULL PRIMARY KEY,namecv varchar(60),nome varchar(60), cognome varchar(60), codfisc varchar(16), datavacc date, vaccino varchar(20))";
+	String create_table_query = "CREATE TABLE IF NOT EXISTS vaccinati_"+utente.getCentroVax()+"(id_univoco int PRIMARY KEY ,namecv varchar(60), nome varchar(60), cognome varchar(60), codfisc varchar(16), datavacc date, vaccino varchar(20))";
 	createTable(conn,create_table_query);
-	int id ;
 	System.out.println("il centro vac ricevuto dal server : "+utente.getCentroVax());
-	String query = "SELECT * FROM vaccinati_"+utente.getCentroVax();
 	try {
-		Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);		
-		ResultSet rs = stmt.executeQuery(query);
-		if (!rs.next()) {
-			id = 1;				
-		}
-		else {
-			rs.last();
-			id = rs.getInt(1) + 1;
-		}
-		String state = "INSERT INTO vaccinati_"+utente.getCentroVax()+"(user_id,namecv,nome,cognome,codfisc,datavacc,vaccino)"+ "VALUES (?,?,?,?,?,?,?)";
+		String state = "INSERT INTO vaccinati_"+utente.getCentroVax()+"(id_univoco,namecv,nome,cognome,codfisc,datavacc,vaccino)"+ "VALUES (?,?,?,?,?,?,?)";
 		PreparedStatement statement = conn.prepareStatement(state);	
 		statement = conn.prepareStatement(state);	
-		statement.setInt(1,id);
+		statement.setInt(1, id);
 		statement.setString(2, utente.getCentroVax());
 		statement.setString(3, utente.getNome());
 		statement.setString(4, utente.getCognome());
@@ -371,7 +375,7 @@ public static boolean loginCittadino(Connection conn,HashMap <String, String> da
 public static  boolean registraCittadino(Connection conn, Utente user) throws SQLException {
 
 	Boolean successo = true ;
-	String query = "SELECT * FROM vaccinati_" + user.getCentroVax() +" WHERE codfisc = ? AND user_id = ?";
+	String query = "SELECT * FROM vaccinati_" + user.getCentroVax() +" WHERE codfisc = ? AND id_univoco = ?";
 	PreparedStatement statement = conn.prepareStatement(query);		
 	statement.setString(1, user.getCodfisc());
 	statement.setInt(2, user.getIdvax());

@@ -76,7 +76,7 @@ public class CittadiniForm {
 	private void initialize() {
 		frmCittadini = new JFrame();
 		frmCittadini.setTitle("App Cittadini - Centri Vaccinali");
-		frmCittadini.setBounds(100, 100, 575, 513);
+		frmCittadini.setBounds(100, 100, 575, 546);
 		frmCittadini.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCittadini.getContentPane().setLayout(null);
 		
@@ -105,7 +105,7 @@ public class CittadiniForm {
 				}
 			}
 		});
-		btnLogIn.setBounds(460, 423, 89, 23);
+		btnLogIn.setBounds(460, 452, 89, 23);
 		frmCittadini.getContentPane().add(btnLogIn);
 		
 		JButton btnRegistrazione = new JButton("Registrati");
@@ -120,7 +120,7 @@ public class CittadiniForm {
 				}
 			}
 		});
-		btnRegistrazione.setBounds(109, 440, 89, 23);
+		btnRegistrazione.setBounds(109, 473, 89, 23);
 		frmCittadini.getContentPane().add(btnRegistrazione);
 		
 	
@@ -232,51 +232,76 @@ public class CittadiniForm {
 				frmCittadini.dispose();
 			}
 		});
-		btnBack.setBounds(10, 440, 89, 23);
+		btnBack.setBounds(10, 473, 89, 23);
 		frmCittadini.getContentPane().add(btnBack);
 		
 		JButton btnShowResult = new JButton("Mostra dati");
 		btnShowResult.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nome_Centro_Vax = src_result.get(listCentriVax.getSelectedIndex()).getNome();
-				tf_NomeCentroVax.setText(nome_Centro_Vax);
 				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
 			}
 		});
-		btnShowResult.setBounds(439, 356, 110, 23);
+		btnShowResult.setBounds(439, 384, 110, 23);
 		frmCittadini.getContentPane().add(btnShowResult);
 		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(0, 389, 569, 14);
-		frmCittadini.getContentPane().add(separator);
+		/**
+		 * 
+		 */
+		JButton btnSeleziona = new JButton("Seleziona");
+		btnSeleziona.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nome_Centro_Vax = src_result.get(listCentriVax.getSelectedIndex()).getNome();
+				tf_NomeCentroVax.setText(nome_Centro_Vax);
+			}
+		});
+		btnSeleziona.setBounds(439, 356, 110, 23);
+		frmCittadini.getContentPane().add(btnSeleziona);
+		//
 		
+		/*
+		 * 
+		 */
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 418, 569, 14);
+		frmCittadini.getContentPane().add(separator);
+		//
+		
+		/*
+		 * 
+		 */
 		JLabel lblNome = new JLabel("Nome :");
 		lblNome.setBounds(10, 46, 69, 14);
 		frmCittadini.getContentPane().add(lblNome);
+		//
 		
+		/*
+		 * 
+		 */
 		JLabel lblComune = new JLabel("Comune :");
 		lblComune.setBounds(10, 71, 69, 14);
 		frmCittadini.getContentPane().add(lblComune);
+		//
 		
 		JLabel lblTipologia = new JLabel("Tipologia :");
 		lblTipologia.setBounds(10, 96, 147, 14);
 		frmCittadini.getContentPane().add(lblTipologia);
 		
 		JLabel lblID = new JLabel("ID :");
-		lblID.setBounds(297, 414, 41, 14);
+		lblID.setBounds(297, 452, 41, 14);
 		frmCittadini.getContentPane().add(lblID);
 		
 		JLabel lblPassword = new JLabel("Password :");
-		lblPassword.setBounds(262, 444, 76, 14);
+		lblPassword.setBounds(262, 477, 76, 14);
 		frmCittadini.getContentPane().add(lblPassword);
 		
 		tfID = new JTextField();
-		tfID.setBounds(348, 411, 86, 20);
+		tfID.setBounds(348, 443, 86, 20);
 		frmCittadini.getContentPane().add(tfID);
 		tfID.setColumns(10);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(348, 441, 86, 20);
+		passwordField.setBounds(348, 474, 86, 20);
 		frmCittadini.getContentPane().add(passwordField);
 		
 		JLabel lbl_CentroVax = new JLabel("Centro vaccinale selezionato : ");
@@ -284,7 +309,8 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(lbl_CentroVax);
 		
 		tf_NomeCentroVax = new JTextField();
-		tf_NomeCentroVax.setBounds(208, 356, 226, 20);
+		tf_NomeCentroVax.setEditable(false);
+		tf_NomeCentroVax.setBounds(195, 356, 239, 20);
 		frmCittadini.getContentPane().add(tf_NomeCentroVax);
 		tf_NomeCentroVax.setColumns(10);
 	}
@@ -299,6 +325,4 @@ public class CittadiniForm {
 			showMessageDialog(null,"Dati logIn errati");
 		}
 	}
-	
-	
 }

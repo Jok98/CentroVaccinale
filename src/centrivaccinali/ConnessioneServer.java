@@ -19,13 +19,7 @@ public class ConnessioneServer implements Serializable {
 	String richiesta;
 	public Object obj;
 
-	/*public ConnessioneServer(String richiesta, Object obj) throws IOException {
-		
-		oout = new ObjectOutputStream(socket.getOutputStream());
-		oin = new ObjectInputStream(socket.getInputStream());
-		this.richiesta = richiesta;
-		this.obj =obj;
-	}*/
+
 	
 public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOException {
 		this.socket = socket;
@@ -68,7 +62,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 		return true;
 	}
 	/**
-	 * TODO vedere se è problematico un solo login, se si torna indietro non si può più accedere
+	 * TODO vedere se ï¿½ problematico un solo login, se si torna indietro non si puï¿½ piï¿½ accedere
 	 * Nascosto errore java.io.EOFException causato da : ConnessioneServer return_cs =  (ConnessioneServer) oin.readObject();
 	 */
 	public static void ricezioneServer() {
@@ -79,8 +73,13 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 	    	
 	    	switch(return_cs.getRichiesta()) {
 	    	case "LogIn" :
-	    		Boolean logIn_result = (Boolean) return_cs.getObj();
 	    		CittadiniForm.LogIn_Result((Boolean) return_cs.getObj());
+	    		System.out.println("Risultato log in : ");
+	    	break;	
+	    	case "IdUnivoco" :
+	    		IscrizioneVaccinato.IdUnivoco = (int) return_cs.getObj();
+	    		System.out.println("id univoco del vaccinato : "+(int) return_cs.getObj());
+	    	break;	
 	    	}
 	    	socket.close();
 		} catch (ClassNotFoundException | IOException e) {
@@ -92,7 +91,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 	}
 	
 
-	@SuppressWarnings("unchecked")
+	//@SuppressWarnings("unchecked")
 	public ArrayList<CentroVaccinale> cercaCentroVaccinale(ConnessioneServer cs) {
 		ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 		try {

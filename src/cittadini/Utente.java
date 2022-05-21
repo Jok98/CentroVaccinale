@@ -19,14 +19,13 @@ public class Utente implements Serializable {
 	 * @param idvacc
 	 * 
 	 */
-	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc, int idvax) {
+	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc) {
 		this.nomecvacc= nomecvacc;
 		this.nome = nome;
 		this.cognome = cognome;
 		this.codfisc = codfisc;
 		this.datavacc = datavacc;
 		this.vacc = vacc;
-		this.idvax = idvax;
 	}
 	
 	/**
@@ -37,12 +36,12 @@ public class Utente implements Serializable {
 	 * @param codfisc
 	 * @param datavacc
 	 * @param vacc
-	 */
+	 
 	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc) {
 
 		
 
-	}
+	}*/
 	
 	public Utente(String nomecvacc,String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
 		this.nomecvacc= nomecvacc;
