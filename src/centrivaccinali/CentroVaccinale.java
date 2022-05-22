@@ -15,6 +15,8 @@ public class CentroVaccinale implements Serializable {
 	String prov ;
 	Integer CAP ;
 	String tipologia ;
+	int severita_media;
+	int n_segnalazioni;
 	public static String richiesta ="centrovax";
 	
 	/**
@@ -27,7 +29,7 @@ public class CentroVaccinale implements Serializable {
 	 * @param CAP
 	 * @param tipologia
 	 */
-	public CentroVaccinale(String nome,String via, Integer nciv,String comune, String prov,Integer CAP, String tipologia) {
+	public CentroVaccinale(String nome,String via, Integer nciv,String comune, String prov,Integer CAP, String tipologia, int severita_media, int n_segnalazioni) {
 		this.nome = nome;
 		this.via = via;
 		this.nciv= nciv;
@@ -35,6 +37,8 @@ public class CentroVaccinale implements Serializable {
 		this.prov = prov;
 		this.CAP = CAP;
 		this.tipologia = tipologia;
+		this.severita_media=severita_media;
+		this.n_segnalazioni=n_segnalazioni;
 	}
 	
 	/**
@@ -97,7 +101,8 @@ public class CentroVaccinale implements Serializable {
 	 * @return
 	 */
 	public String getInfo() {
-		String info = "Nome : " + this.nome + "\r\n"+"Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + "\r\n"+"Tipologia centro : " + this.tipologia ;
+		String info = "Nome : " + this.nome + "\r\n"+"Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + "\r\n"+"Tipologia centro : " + this.tipologia
+				+ "\r\n"+"Severità media : " + this.severita_media+ "\r\n"+"Segnalazioni totali : "+this.n_segnalazioni;
 		
 		return info;
 	}

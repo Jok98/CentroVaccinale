@@ -279,31 +279,52 @@ public class CittadiniForm {
 		frmCittadini.getContentPane().add(lblComune);
 		//
 		
+		/**
+		 * 
+		 */
 		JLabel lblTipologia = new JLabel("Tipologia :");
 		lblTipologia.setBounds(10, 96, 147, 14);
 		frmCittadini.getContentPane().add(lblTipologia);
 		
+		/*
+		 * 
+		 */
 		JLabel lblID = new JLabel("ID :");
 		lblID.setBounds(297, 452, 41, 14);
 		frmCittadini.getContentPane().add(lblID);
 		
+		/**
+		 * 
+		 */
 		JLabel lblPassword = new JLabel("Password :");
 		lblPassword.setBounds(262, 477, 76, 14);
 		frmCittadini.getContentPane().add(lblPassword);
 		
+		/**
+		 * 
+		 */
 		tfID = new JTextField();
 		tfID.setBounds(348, 443, 86, 20);
 		frmCittadini.getContentPane().add(tfID);
 		tfID.setColumns(10);
 		
+		/*
+		 * 
+		 */
 		passwordField = new JPasswordField();
 		passwordField.setBounds(348, 474, 86, 20);
 		frmCittadini.getContentPane().add(passwordField);
 		
+		/*
+		 * 
+		 */
 		JLabel lbl_CentroVax = new JLabel("Centro vaccinale selezionato : ");
 		lbl_CentroVax.setBounds(10, 360, 188, 14);
 		frmCittadini.getContentPane().add(lbl_CentroVax);
 		
+		/*
+		 * 
+		 */
 		tf_NomeCentroVax = new JTextField();
 		tf_NomeCentroVax.setEditable(false);
 		tf_NomeCentroVax.setBounds(195, 356, 239, 20);

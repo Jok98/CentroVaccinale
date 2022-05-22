@@ -108,8 +108,8 @@ public void run() {
     		break;
     	
     	case "registrazioneVaccinato" :
-    		int id = set_get_Id(conn);
-    		registraVaccinato(conn,(Utente) cs.getObj(), id);
+    		
+    		int id =registraVaccinato(conn,(Utente) cs.getObj());
     		cs.setRichiesta("IdUnivoco");
     		cs.setObj(id);
     		cs.getObj();
@@ -222,8 +222,8 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 	ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>() ;
 	CentroVaccinale cv = null;
 	String nome,via,citta,prov,tip = null;
-	int CAP;
-	int nciv;
+	int nciv, CAP,severita_media, n_segnalazioni ;
+
 		try {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
@@ -234,7 +234,9 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
                 nome = rs.getString(5);
                 via = rs.getString(6);
                 tip = rs.getString(7);
-                cv = new CentroVaccinale (nome, via ,nciv, citta, prov, CAP, tip);
+                severita_media = rs.getInt(8);
+                n_segnalazioni = rs.getInt(9);
+                cv = new CentroVaccinale (nome, via ,nciv, citta, prov, CAP, tip, severita_media,n_segnalazioni);
                 cvlis.add(cv);  
             }
 			statement.close();
@@ -245,28 +247,26 @@ public static ArrayList<CentroVaccinale> cercaCentroVaccinale(PreparedStatement 
 }
 
 
-public static  boolean registraVaccinato(Connection conn, Utente utente, int id) throws SQLException {
+public static int registraVaccinato(Connection conn, Utente utente) throws SQLException {
+	int id = -1;
 
-	String create_table_query = "CREATE TABLE IF NOT EXISTS vaccinati_"+utente.getCentroVax()+"(id_univoco int PRIMARY KEY , nome varchar(60), cognome varchar(60), codfisc varchar(16), "
-			+ "datavacc date, vaccino varchar(20),nomeCentro varchar(60))";
-	createTable(conn,create_table_query);
 	System.out.println("il centro vax ricevuto dal server : "+utente.getCentroVax());
 	
 	Boolean successo = true ;
-	String query = "SELECT * FROM vaccinati_"+utente.getCentroVax()+" WHERE id_univoco =? OR codfisc =?";
+	String query = "SELECT * FROM vaccinati_"+utente.getCentroVax()+" WHERE codfisc =?";
 	PreparedStatement statement = conn.prepareStatement(query);		
-	statement.setInt(1, id);
-	statement.setString(2, utente.getCodfisc());
+	statement.setString(1, utente.getCodfisc());
 	successo = checkUserData(conn, statement);
 
 	if (successo == true) {
 		System.out.println("Vaccinato già registrato");
 		showMessageDialog(null,"Vaccinato già registrato");
-		return false ;
+		return id ;
 	} 
 	else {
 	
 	try {
+		id = set_get_Id(conn);
 		String state = "INSERT INTO vaccinati_"+utente.getCentroVax()+"(id_univoco,nome,cognome,codfisc,datavacc,vaccino,nomeCentro)"+ "VALUES (?,?,?,?,?,?,?)";
 		statement = conn.prepareStatement(state);	
 		statement.setInt(1, id);
@@ -280,9 +280,9 @@ public static  boolean registraVaccinato(Connection conn, Utente utente, int id)
 		statement.close();
 	} catch (SQLException e) {	
 		e.printStackTrace();
-		return false;
+		return id;
 	}
-	return true;
+	return id;
 	}
 }
 
@@ -300,6 +300,9 @@ public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale 
 		return false ;
 	} 
 	else {
+	String create_table_query = "CREATE TABLE IF NOT EXISTS vaccinati_"+cv.getNome()+"(id_univoco int PRIMARY KEY , nome varchar(60), cognome varchar(60), codfisc varchar(16), "
+				+ "datavacc date, vaccino varchar(20),nomeCentro varchar(60))";
+	createTable(conn,create_table_query);
 	String state = "INSERT INTO centrivaccinali (siglaprov,numciv,cap,comune,nome,indirizzo,tipologia)"+ "VALUES (?,?,?,?,?,?,?)";
 		try {
 			
@@ -321,16 +324,17 @@ public static  boolean registraCentroVaccinale(Connection conn, CentroVaccinale 
 	}
 }
 
-public static  boolean registraCittadino(Connection conn, Utente user) throws SQLException {
-
-	Boolean successo = true ;
+public static  boolean registraCittadino(Connection conn, Utente user) throws SQLException   {
+	//se un cittadino si è vaccinato in diversi centri vax verrà preso uno di questi come riferimento per la registrazione
+	Boolean successo = false ;
+	
 	String query = "SELECT * FROM vaccinati_" + user.getCentroVax() +" WHERE codfisc = ? AND id_univoco = ?";
 	PreparedStatement statement = conn.prepareStatement(query);		
 	statement.setString(1, user.getCodfisc());
 	statement.setInt(2, user.getIdvax());
-	
 	successo = checkUserData(conn, statement);
-
+	
+	
 	if (successo == false) {
 		System.out.println("Centro vaccinale o ID univoco non corrispondono");
 		showMessageDialog(null,"Centro vaccinale o ID univoco non corrispondono");
@@ -359,7 +363,6 @@ public static  boolean registraCittadino(Connection conn, Utente user) throws SQ
 }
 
 public static String loginCittadino(Connection conn,HashMap <String, String> datiLogIn) {
-	//bisogna controllare il centro vax dell'utente
 	String query = "SELECT userid,password FROM cittadini_registrati WHERE userid=? AND password=?" ;
 	try {
 		PreparedStatement statement = conn.prepareStatement(query);
@@ -440,13 +443,13 @@ public static void updateEventiAvversi(String centroVax, int sev_media_att) {
 public static boolean checkUserData(Connection conn, PreparedStatement statement) {
 	 try {
 			ResultSet rs = statement.executeQuery();
-			if (rs.next() == false) { 
-				return false;
+			if (rs.next() == true) { 
+				return true;
 			}
 			} catch (SQLException a) {
-				a.printStackTrace();
+				//rimosso print errore
 			}
-	 return true ;
+	 return false ;
 }
 
 @SuppressWarnings("unused")

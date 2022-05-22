@@ -187,7 +187,7 @@ public class IscrizioneCentroVax extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String centrovax =tfNomeCentroVax.getText().strip();
 				CV = new CentroVaccinale(centrovax.replaceAll(" ", ""), tfIndirizzoCentroVax.getText(), Integer.valueOf(tfNCivico.getText()), 
-						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem());
+						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem(),-1,0);
 				
 				//System.out.println(CV.tipologia);	
 				
