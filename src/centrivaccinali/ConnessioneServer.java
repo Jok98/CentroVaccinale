@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import cittadini.CittadiniForm;
 import server.ServerCV;
 
@@ -62,8 +64,7 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 		return true;
 	}
 	/**
-	 * TODO vedere se � problematico un solo login, se si torna indietro non si pu� pi� accedere
-	 * Nascosto errore java.io.EOFException causato da : ConnessioneServer return_cs =  (ConnessioneServer) oin.readObject();
+	 * 
 	 */
 	public static void ricezioneServer() {
 		
@@ -73,8 +74,10 @@ public ConnessioneServer(Socket socket, String richiesta, Object obj) throws IOE
 	    	
 	    	switch(return_cs.getRichiesta()) {
 	    	case "LogIn" :
-	    		CittadiniForm.LogIn_Result((Boolean) return_cs.getObj());
-	    		System.out.println("Risultato log in : ");
+	    		HashMap<String, String> datiLogIn = (HashMap<String, String>) return_cs.getObj();
+	    		CittadiniForm.LogIn_Result(datiLogIn.get("logInResult"),datiLogIn.get("centroVax"));
+	    		System.out.println("Risultato log in : "+datiLogIn.get("logInResult"));
+	    		datiLogIn.clear();
 	    	break;	
 	    	case "IdUnivoco" :
 	    		IscrizioneVaccinato.IdUnivoco = (int) return_cs.getObj();

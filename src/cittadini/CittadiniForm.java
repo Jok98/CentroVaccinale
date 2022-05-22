@@ -84,14 +84,10 @@ public class CittadiniForm {
 		btnLogIn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				if(tf_NomeCentroVax.getText().isEmpty()) {
-					showMessageDialog(null,"Selezionare il centro in cui si è stati vaccinati");
-				}else {
+		
 					HashMap <String, String> datiLogIn = new HashMap <String, String>();
 					datiLogIn.put("ID", tfID.getText());	
 					datiLogIn.put("Password", String.valueOf(passwordField.getPassword()));
-				
-					//System.out.println(datiLogIn.get("Password"));
 					try {
 						Socket socket = CentriVaccinali.openSocket();
 						ConnessioneServer cs = new ConnessioneServer(socket,"LogIn", datiLogIn);
@@ -102,7 +98,7 @@ public class CittadiniForm {
 					}
 				//AccessConf.frmInvioDatiEventi.setVisible(true);
 				//frmCittadini.setVisible(false);
-				}
+				
 			}
 		});
 		btnLogIn.setBounds(460, 452, 89, 23);
@@ -315,14 +311,15 @@ public class CittadiniForm {
 		tf_NomeCentroVax.setColumns(10);
 	}
 	
-	public static void LogIn_Result(Boolean result) {
-		//logIn_status=result;
-		if(result==true) {
+	public static void LogIn_Result(String result, String centroVax) {
+		if(result.contentEquals("true")) {
 			AccessConf.frmInvioDatiEventi.setVisible(true);
+			AccessConf.tfCentroVax.setText(centroVax);
 			frmCittadini.setVisible(false);
-			AccessConf.tfCentroVax.setText(nome_Centro_Vax);
+			
 		}else {
 			showMessageDialog(null,"Dati logIn errati");
 		}
 	}
+
 }
