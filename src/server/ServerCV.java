@@ -64,13 +64,13 @@ public static void main(String[] args) throws IOException, SQLException {
 	        System.out.println(connesso);
 	        
 	        String create_table_centro = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(60) PRIMARY KEY,"
-	        		+ "indirizzo varchar(60),tipologia varchar(20), severita_media int DEFAULT -1 , n_segnalazioni int DEFAULT 0 )";
+	        		+ "indirizzo varchar(60),tipologia varchar(20), severita_media float DEFAULT -1 , n_segnalazioni float DEFAULT 0 )";
 	    	createTable(conn,create_table_centro);
 	        
 	        String create_table_cittadini = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
 	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20), centroVax varchar(20))";
 	    	createTable(conn,create_table_cittadini);
-	    	
+	    	//si può mettere valore massimo 16bit
 	    	String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 ";
 	    	createTable(conn,create_table_id);
 	
@@ -401,8 +401,8 @@ public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> 
 				
 			}else statement.setString(i, (String) Eventi_Avversi.get(i));
 		}	
-		int sev_media_att = somma_ev_av/6;
-		System.out.println(sev_media_att);
+		float sev_media_att = (float) (somma_ev_av/6.0);
+		System.out.println("severita' media eventi avversi segnalati : "+sev_media_att);
 		updateEventiAvversi(centroVax,sev_media_att);
 		statement.executeUpdate();
 		statement.close();
@@ -413,7 +413,7 @@ public static boolean inserisciEventiAvversi(Connection conn, ArrayList<Object> 
 	return true;
 }
 
-public static void updateEventiAvversi(String centroVax, int sev_media_att) {
+public static void updateEventiAvversi(String centroVax, float sev_media_att) {
 	 
 	String query = "SELECT severita_media, n_segnalazioni FROM centrivaccinali WHERE nome=?" ;
 	try {
@@ -421,16 +421,16 @@ public static void updateEventiAvversi(String centroVax, int sev_media_att) {
 		statement.setString(1, centroVax);
 		ResultSet rs = statement.executeQuery();
 		rs.next();
-		int sevMediaPrec = rs.getInt(1);
+		float sevMediaPrec = rs.getInt(1);
 		int nEvAvPrec = rs.getInt(2);
 		int nEvAv = nEvAvPrec+1;
-		int sev_media_tot;
+		float sev_media_tot;
 		if((sevMediaPrec<0)) {
 			sev_media_tot = sev_media_att;
-		} else sev_media_tot = (sev_media_att+sevMediaPrec)/2;
+		} else sev_media_tot = (sev_media_att+(sevMediaPrec*nEvAvPrec))/nEvAv;
 		
 		statement = conn.prepareStatement("UPDATE centrivaccinali SET severita_media = ?, n_segnalazioni = ? WHERE nome = ?;");
-		statement.setInt(1, sev_media_tot);
+		statement.setFloat(1, sev_media_tot);
 		statement.setInt(2, nEvAv);
 		statement.setString(3, centroVax);
 		statement.executeUpdate();

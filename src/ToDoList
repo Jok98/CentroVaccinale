@@ -1,6 +1,5 @@
 - Id incrementale 16 bit
 - Implementare 3 slot per la data durante l'iscrizione del vaccinato
-- verificare centro vax selezionato prima/durante di log in / creare tabella durante registrazione cittadino
 - un vaccinato può essere iscritto una sola volta per ogni centro disponibile
 
 Da risolvere :
