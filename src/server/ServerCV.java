@@ -16,17 +16,13 @@ import java.util.Scanner;
 import centrivaccinali.*;
 import cittadini.Utente;
 
-
-
-
-
 public class ServerCV {
-	private static final String url = "jdbc:postgresql://127.0.0.1/Laboratorio";
-	private static final String user = "postgres";
-	private static final String password = "admin";
+	private static String url = "jdbc:postgresql://127.0.0.1/LLaboratorio";
+	private static  String user = "ppostgres";
+	private static  String password = "aadmin";
 	static Connection conn = null;
 	static Scanner sc= new Scanner(System.in);
-	public static final int PORT = 8083;
+	public static int PORT = 8083;
 	
 	
 
@@ -38,7 +34,7 @@ static public class ServerThread extends Thread{
 	private static ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 	private ArrayList<Object> Eventi_Avversi = new ArrayList<Object>();
 	private HashMap <String, String> datiLogIn = new HashMap <String, String>();
-	
+	private static Scanner scanner = new Scanner(System.in);
 	ServerThread (Socket s){
 		socket = s;
 		try {
@@ -50,33 +46,48 @@ static public class ServerThread extends Thread{
 
 	
 public static void main(String[] args) throws IOException, SQLException {
-	    ServerSocket s = new ServerSocket(PORT);  
-	    conn = connect();
-	    System.out.println("Server started");
-
-	    
-	   
 	    try {
+	    	String changeDb="";
 	      while (true) {
-	        Socket socket = s.accept();
-	        new ServerThread(socket);
-	        boolean connesso = s.isBound();
-	        System.out.println(connesso);
+	    	do {
+	    		 System.out.println("Vuoi modificare dati login database? y/n");
+	    		 Scanner scanner = new Scanner(System.in);
+	    		 changeDb  = scanner.next();
+	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));
+	    	 //System.out.println("digitato : "+changeDb);
+	    	 if(changeDb.equals("y")) {
+	    		 System.out.println("inserire nuovi parametri : \r");
+	    		 System.out.println("inserire nuovo nome database : \r");
+	    		 url = "jdbc:postgresql://127.0.0.1/"+scanner.nextLine();
+	    		 System.out.println("inserire nuovo user db : \r");
+	    		 user = scanner.nextLine();
+	    		 System.out.println("inserire nuova password db : \r");
+	    		 password = scanner.nextLine();
+	    	 }
+	    	 
+	    	 ServerSocket s = new ServerSocket(PORT);  
+	    	 conn = connect();
+		     System.out.println("Server started");
+	         Socket socket = s.accept();
+	         new ServerThread(socket);
+	         boolean connesso = s.isBound();
+	         System.out.println(connesso);
 	        
-	        String create_table_centro = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(60) PRIMARY KEY,"
+	         String create_table_centro = "CREATE TABLE IF NOT EXISTS centrivaccinali "+"(siglaprov varchar(2),numciv int ,cap int,comune varchar(20),nome varchar(60) PRIMARY KEY,"
 	        		+ "indirizzo varchar(60),tipologia varchar(20), severita_media float DEFAULT -1 , n_segnalazioni float DEFAULT 0 )";
-	    	createTable(conn,create_table_centro);
+	    	 createTable(conn,create_table_centro);
 	        
-	        String create_table_cittadini = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
-	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20), centroVax varchar(20))";
-	    	createTable(conn,create_table_cittadini);
-	    	//si può mettere valore massimo 16bit
-	    	String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 MAXVALUE 65535";
-	    	createTable(conn,create_table_id);
+	         String create_table_cittadini = "CREATE TABLE IF NOT EXISTS cittadini_registrati ( nome varchar(20),cognome varchar(20),"
+	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20), centroVax varchar(60))";
+	    	 createTable(conn,create_table_cittadini);
+	    	 //65535 valore massimo 16bit
+	    	 String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 MAXVALUE 65535";
+	    	 createTable(conn,create_table_id);
+	    	 s.close();
 	
 	    }
 	    } finally {
-	      s.close();
+	      
 	    }
 	}
 	
@@ -138,7 +149,7 @@ public void run() {
     		String ct = "SELECT * FROM centrivaccinali WHERE comune LIKE ? AND tipologia=?";
     		statement = conn.prepareStatement(ct);
     		String[] ComuneTip = (String[]) cs.getObj();
-			statement.setString(1, ComuneTip[0]);
+			statement.setString(1, (ComuneTip[0]+"%"));
 			statement.setString(2, ComuneTip[1]);
 			System.out.println("Il server ha ricevuto richiesta per ricerca di : "+ComuneTip[0]+" "+ComuneTip[1]);
 			cvlis = new ArrayList<CentroVaccinale>();
