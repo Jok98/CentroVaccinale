@@ -71,7 +71,7 @@ public static void main(String[] args) throws IOException, SQLException {
 	        		+ "codfisc varchar(16)PRIMARY KEY, email varchar(30),userid varchar(16),password varchar(30),id varchar(20), centroVax varchar(20))";
 	    	createTable(conn,create_table_cittadini);
 	    	//si può mettere valore massimo 16bit
-	    	String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 ";
+	    	String create_table_id = "CREATE SEQUENCE IF NOT EXISTS IDprog AS INT START WITH 1 INCREMENT BY 1 MAXVALUE 65535";
 	    	createTable(conn,create_table_id);
 	
 	    }

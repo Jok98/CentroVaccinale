@@ -1,6 +1,3 @@
-- Id incrementale 16 bit
 - Implementare 3 slot per la data durante l'iscrizione del vaccinato
+- PULIRE TF
 - un vaccinato può essere iscritto una sola volta per ogni centro disponibile
-
-Da risolvere :
-- inserimento nella tabella dell'ultimo evento avverso

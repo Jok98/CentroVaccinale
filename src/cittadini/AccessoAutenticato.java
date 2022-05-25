@@ -20,14 +20,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextPane;
+import java.awt.Font;
 
 public class AccessoAutenticato {
 
 	public JFrame frmInvioDatiEventi;
 	public static AccessoAutenticato window = new AccessoAutenticato();
-	private JTable tblEventiAvversi;
 	static JTextField tfCentroVax;
 	private ArrayList<Object> Eventi_Avversi = new ArrayList<Object>();
+	private JTextField tf_0;
+	private JTextField tf_1;
+	private JTextField tf_2;
+	private JTextField tf_3;
+	private JTextField tf_4;
+	private JTextField tf_5;
 	/**
 	 * Launch the application.
 	 */
@@ -58,49 +67,9 @@ public class AccessoAutenticato {
 	private void initialize() {
 		frmInvioDatiEventi = new JFrame();
 		frmInvioDatiEventi.setTitle("Segnalazione eventi avversi");
-		frmInvioDatiEventi.setBounds(100, 100, 637, 300);
+		frmInvioDatiEventi.setBounds(100, 100, 625, 606);
 		frmInvioDatiEventi.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmInvioDatiEventi.getContentPane().setLayout(null);
-		
-		tblEventiAvversi = new JTable();
-		tblEventiAvversi.setSurrendersFocusOnKeystroke(true);
-		tblEventiAvversi.setRowSelectionAllowed(false);
-		tblEventiAvversi.setModel(new DefaultTableModel(
-			new Object[][] {
-				{"Mal di testa", null, null},
-				{"Febbre", null, null},
-				{"Dolori muscolari e articolari", null, null},
-				{"Linfoadenopatia", null, null},
-				{"Tachicardia", null, null},
-				{"Crisi ipertensiva", null, null},
-			},
-			new String[] {
-				"EventoAvverso", "Severita", "Note Aggiuntive"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Integer.class, String.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-			boolean[] columnEditables = new boolean[] {
-				false, true, true
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		tblEventiAvversi.getColumnModel().getColumn(0).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(0).setPreferredWidth(150);
-		tblEventiAvversi.getColumnModel().getColumn(0).setMinWidth(100);
-		tblEventiAvversi.getColumnModel().getColumn(1).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(1).setPreferredWidth(35);
-		tblEventiAvversi.getColumnModel().getColumn(2).setResizable(false);
-		tblEventiAvversi.getColumnModel().getColumn(2).setPreferredWidth(200);
-		tblEventiAvversi.getColumnModel().getColumn(2).setMinWidth(200);
-		tblEventiAvversi.setBounds(10, 70, 587, 96);
-		frmInvioDatiEventi.getContentPane().add(tblEventiAvversi);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(0, 38, 621, 10);
@@ -108,7 +77,7 @@ public class AccessoAutenticato {
 		
 		tfCentroVax = new JTextField();
 		tfCentroVax.setEditable(false);
-		tfCentroVax.setBounds(341, 7, 270, 20);
+		tfCentroVax.setBounds(327, 7, 270, 20);
 		frmInvioDatiEventi.getContentPane().add(tfCentroVax);
 		tfCentroVax.setColumns(10);
 		
@@ -116,6 +85,72 @@ public class AccessoAutenticato {
 		JLabel lblCentroVax = new JLabel("Centro vaccinale dove \u00E8 stata eseguita la vaccinazione :");
 		lblCentroVax.setBounds(10, 10, 321, 14);
 		frmInvioDatiEventi.getContentPane().add(lblCentroVax);
+		
+		JComboBox cb_0 = new JComboBox();
+		cb_0.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_0.setSelectedIndex(0);
+		cb_0.setBounds(175, 80, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_0);
+		
+		JComboBox cb_1 = new JComboBox();
+		cb_1.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_1.setSelectedIndex(0);
+		cb_1.setBounds(175, 156, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_1);
+		
+		JComboBox cb_2 = new JComboBox();
+		cb_2.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_2.setSelectedIndex(0);
+		cb_2.setBounds(175, 232, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_2);
+		
+		JComboBox cb_3 = new JComboBox();
+		cb_3.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_3.setSelectedIndex(0);
+		cb_3.setBounds(175, 308, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_3);
+		
+		JComboBox cb_4 = new JComboBox();
+		cb_4.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_4.setSelectedIndex(0);
+		cb_4.setBounds(175, 382, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_4);
+		
+		JComboBox cb_5 = new JComboBox();
+		cb_5.setModel(new DefaultComboBoxModel(new String[] {"0", "1", "2", "3", "4", "5"}));
+		cb_5.setSelectedIndex(0);
+		cb_5.setBounds(175, 454, 32, 22);
+		frmInvioDatiEventi.getContentPane().add(cb_5);
+		
+		tf_0 = new JTextField();
+		tf_0.setBounds(242, 59, 355, 65);
+		frmInvioDatiEventi.getContentPane().add(tf_0);
+		tf_0.setColumns(10);
+		
+		tf_1 = new JTextField();
+		tf_1.setColumns(10);
+		tf_1.setBounds(242, 135, 355, 65);
+		frmInvioDatiEventi.getContentPane().add(tf_1);
+		
+		tf_2 = new JTextField();
+		tf_2.setColumns(10);
+		tf_2.setBounds(242, 211, 355, 65);
+		frmInvioDatiEventi.getContentPane().add(tf_2);
+		
+		tf_3 = new JTextField();
+		tf_3.setColumns(10);
+		tf_3.setBounds(242, 287, 355, 65);
+		frmInvioDatiEventi.getContentPane().add(tf_3);
+		
+		tf_4 = new JTextField();
+		tf_4.setColumns(10);
+		tf_4.setBounds(242, 363, 355, 61);
+		frmInvioDatiEventi.getContentPane().add(tf_4);
+		
+		tf_5 = new JTextField();
+		tf_5.setColumns(10);
+		tf_5.setBounds(242, 435, 355, 61);
+		frmInvioDatiEventi.getContentPane().add(tf_5);
 		
 		JButton btnSegnala = new JButton("Segnala");
 		btnSegnala.addActionListener(new ActionListener() {
@@ -125,12 +160,15 @@ public class AccessoAutenticato {
 		 * 
 		 */
 			public void actionPerformed(ActionEvent e) {
-				System.out.println((String) tblEventiAvversi.getModel().getValueAt(0, 0));
-				
+				//System.out.println((String) tblEventiAvversi.getModel().getValueAt(0, 0));
+				Boolean check = true;
 				Eventi_Avversi.add(tfCentroVax.getText());
+				JComboBox [] cb = {cb_0,cb_1,cb_2,cb_3,cb_4,cb_5};
+				JTextField [] tf = {tf_0,tf_1,tf_2,tf_3,tf_4,tf_5};
 				for(int i =0 ; i<=5; i++) {
-					Eventi_Avversi.add((Integer)tblEventiAvversi.getModel().getValueAt(i, 1));
-					Eventi_Avversi.add((String)tblEventiAvversi.getModel().getValueAt(i, 2));
+					Eventi_Avversi.add(Integer.valueOf((String) cb[i].getSelectedItem()));
+					Eventi_Avversi.add((String)tf[i].getText());
+					
 				}
 				System.out.println(Eventi_Avversi);
 				try {
@@ -148,7 +186,7 @@ public class AccessoAutenticato {
 				//System.out.println(Eventiavversi);
 			}
 		});
-		btnSegnala.setBounds(242, 227, 89, 23);
+		btnSegnala.setBounds(508, 521, 89, 42);
 		frmInvioDatiEventi.getContentPane().add(btnSegnala);
 		
 		JButton btnBack = new JButton("Indietro");
@@ -160,8 +198,46 @@ public class AccessoAutenticato {
 				frmInvioDatiEventi.dispose();
 			}
 		});
-		btnBack.setBounds(10, 227, 89, 23);
+		btnBack.setBounds(10, 521, 89, 42);
 		frmInvioDatiEventi.getContentPane().add(btnBack);
+		
+		JLabel lblMalDiTesta = new JLabel("Mal di testa :");
+		lblMalDiTesta.setLabelFor(cb_0);
+		lblMalDiTesta.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblMalDiTesta.setBounds(10, 84, 98, 14);
+		frmInvioDatiEventi.getContentPane().add(lblMalDiTesta);
+		
+		JLabel lblFebbre = new JLabel("Febbre :");
+		lblFebbre.setLabelFor(cb_1);
+		lblFebbre.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFebbre.setBounds(10, 160, 98, 14);
+		frmInvioDatiEventi.getContentPane().add(lblFebbre);
+		
+		JLabel lblDoloriMuscolariE = new JLabel("Dolori muscolari/articolari");
+		lblDoloriMuscolariE.setLabelFor(cb_2);
+		lblDoloriMuscolariE.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblDoloriMuscolariE.setBounds(10, 236, 155, 20);
+		frmInvioDatiEventi.getContentPane().add(lblDoloriMuscolariE);
+		
+		JLabel lblLinfoadenopatia = new JLabel("Linfoadenopatia :");
+		lblLinfoadenopatia.setLabelFor(cb_3);
+		lblLinfoadenopatia.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblLinfoadenopatia.setBounds(10, 312, 98, 14);
+		frmInvioDatiEventi.getContentPane().add(lblLinfoadenopatia);
+		
+		JLabel lblTachicardia = new JLabel("Tachicardia :");
+		lblTachicardia.setLabelFor(cb_4);
+		lblTachicardia.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblTachicardia.setBounds(10, 386, 98, 14);
+		frmInvioDatiEventi.getContentPane().add(lblTachicardia);
+		
+		JLabel lblCrisiIpertensiva = new JLabel("Crisi ipertensiva :");
+		lblCrisiIpertensiva.setLabelFor(cb_5);
+		lblCrisiIpertensiva.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblCrisiIpertensiva.setBounds(10, 458, 98, 14);
+		frmInvioDatiEventi.getContentPane().add(lblCrisiIpertensiva);
+		
+		
 		
 		
 	}
