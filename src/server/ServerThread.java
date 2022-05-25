@@ -16,17 +16,13 @@ import java.util.Scanner;
 import centrivaccinali.*;
 import cittadini.Utente;
 
-public class ServerCV {
-	private static String url = "jdbc:postgresql://127.0.0.1/LLaboratorio";
-	private static  String user = "ppostgres";
-	private static  String password = "aadmin";
+public class ServerThread extends Thread{
+	private static String url = "jdbc:postgresql://127.0.0.1/Laboratorio";
+	private static  String user = "postgres";
+	private static  String password = "admin";
 	static Connection conn = null;
 	static Scanner sc= new Scanner(System.in);
 	public static int PORT = 8083;
-	
-	
-
-static public class ServerThread extends Thread{
 	private Socket socket;
 	private ObjectInputStream oin;
 	private ObjectOutputStream oout;
@@ -45,15 +41,15 @@ static public class ServerThread extends Thread{
 	}	
 
 	
-public static void main(String[] args) throws IOException, SQLException {
+public static void main(String[] args) {
 	    try {
 	    	String changeDb="";
 	      while (true) {
-	    	do {
+	    	/*do {
 	    		 System.out.println("Vuoi modificare dati login database? y/n");
 	    		 Scanner scanner = new Scanner(System.in);
 	    		 changeDb  = scanner.next();
-	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));
+	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));*/
 	    	 //System.out.println("digitato : "+changeDb);
 	    	 if(changeDb.equals("y")) {
 	    		 System.out.println("inserire nuovi parametri : \r");
@@ -86,7 +82,10 @@ public static void main(String[] args) throws IOException, SQLException {
 	    	 s.close();
 	
 	    }
-	    } finally {
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
 	      
 	    }
 	}
@@ -188,7 +187,7 @@ public void run() {
    
 	}
 
-}
+
 
 public static int set_get_Id(Connection conn) {
 	int id = 0 ;
