@@ -21,40 +21,86 @@
 				</excludes>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<release>15</release>
-				</configuration>
-			</plugin>
+		
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<release>15</release>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.2.1</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>exec</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>default-cli</id>
+							<configuration>
+								<mainClass>server.ServerThread</mainClass>
+							</configuration>
+						</execution>
+						<execution>
+							<id>second-cli</id>
+							<configuration>
+								<mainClass>centrivaccinali.CentriVaccinali</mainClass>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sql-maven-plugin</artifactId>
+					<version>1.5</version>
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
+					<dependencies>
+						<!-- specify the dependent JDBC driver here -->
+						<dependency>
+							<groupId>org.postgresql</groupId>
+							<artifactId>postgresql</artifactId>
+							<version>42.3.4</version>
+							
+							<scope>system</scope>
+    					<systemPath>C:\Program Files\Java\JAR\postgresql-42.3.4.jar</systemPath>
+							
+						</dependency>
+					</dependencies>
+
+					<!-- common configuration shared by all executions -->
+					<configuration>
+						<driver>org.postgresql.Driver</driver>
+						<url>jdbc:postgresql://localhost:5432/Laboratorio</url>
+						<username>postgres</username>
+						<password>admin</password>
+						
+						
+					</configuration>
+					<executions>
 					<execution>
+						<id>create-db</id>
+						
 						<goals>
-							<goal>exec</goal>
+							<goal>execute</goal>
 						</goals>
-					</execution>
-					<execution>
-						<id>default-cli</id>
 						<configuration>
-							<mainClass>server.ServerThread</mainClass>
+						
+							<url>jdbc:postgresql://localhost:5432/Laboratorio</url>
+							<!-- no transaction -->
+							<autocommit>true</autocommit>
+							<sqlCommand>CREATE DATABASE yourdb</sqlCommand>
+							
 						</configuration>
 					</execution>
-					<execution>
-						<id>second-cli</id>
-						<configuration>
-							<mainClass>centrivaccinali.CentriVaccinali</mainClass>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-		</plugins>
+					</executions>
+					
+				</plugin>
+			</plugins>
+		
 	</build>
 </project>
