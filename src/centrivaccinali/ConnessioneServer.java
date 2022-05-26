@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import cittadini.CittadiniForm;
-import server.ServerThread;
 
 
 public class ConnessioneServer implements Serializable {

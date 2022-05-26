@@ -1,5 +1,7 @@
 package cittadini;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -126,7 +128,28 @@ public class Registrazione {
 		JButton btnRegistra = new JButton("Registrati");
 		btnRegistra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String password = String.valueOf(passwordField.getPassword());
+				
+				Boolean check = true;
+				String password,NomeCentroVax,Nome,Cognome,CodiceFiscale,Email,UserID;
+				Integer IDUnivocoVax;
+				NomeCentroVax =	tf_NomeCentroVax.getText().replaceAll(" ", "");
+				Nome = tfNome.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+				Cognome = tfCognome.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+				CodiceFiscale = tfCodiceFiscale.getText().replaceAll(" ", "");
+				Email = tfEmail.getText().replaceAll(" ", "");
+				UserID = tfUserID.getText().replaceAll(" ", "");
+				password = String.valueOf(passwordField.getPassword());
+				
+				try {
+					IDUnivocoVax = Integer.valueOf(tfIDUnivocoVax.getText().replaceAll(" ", ""));
+				} catch (NumberFormatException a) {
+					showMessageDialog(null,"Formato dell'id univoco vaccinazione non valido");
+				}
+				
+				if (NomeCentroVax.isEmpty() || Nome.isEmpty() || Cognome.isEmpty() || CodiceFiscale.isEmpty()  
+						|| Email.toString().isEmpty() || !(Email.contains("@")) || UserID.isEmpty() || password.isEmpty())	check = false;	
+				if (check == true) {
+				
 				Utente user = new Utente(tf_NomeCentroVax.getText(),tfNome.getText(), tfCognome.getText(), tfCodiceFiscale.getText(), tfEmail.getText(),
 						tfUserID.getText(), password, Integer.valueOf(tfIDUnivocoVax.getText()));
 				try {
@@ -141,6 +164,10 @@ public class Registrazione {
 				}
 				CittadiniForm.frmCittadini.setVisible(true);
 				frame.dispose();
+				}
+				else {
+					showMessageDialog(null,"Errore compilazione campi");
+				}
 			}
 		});
 		btnRegistra.setBounds(174, 248, 89, 23);
@@ -175,4 +202,3 @@ public class Registrazione {
 		//
 	}
 }
-

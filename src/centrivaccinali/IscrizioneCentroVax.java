@@ -1,5 +1,7 @@
 package centrivaccinali;
 
+import static javax.swing.JOptionPane.showMessageDialog;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -185,23 +187,49 @@ public class IscrizioneCentroVax extends JFrame {
 		btnRegistra.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
-				String centrovax =tfNomeCentroVax.getText().strip();
-				CV = new CentroVaccinale(centrovax.replaceAll(" ", ""), tfIndirizzoCentroVax.getText(), Integer.valueOf(tfNCivico.getText()), 
-						tfComune.getText(), tfSiglaProvincia.getText(), Integer.valueOf(tfCAP.getText()), (String) comboBox.getSelectedItem(),-1,0);
+				Boolean validità = true;
+				Integer NCivico = null;
+				Integer CAP = null;
+				String centrovax, IndirizzoCentroVax,  Comune, SiglaProvincia;
 				
-				//System.out.println(CV.tipologia);	
-				
+				centrovax = tfNomeCentroVax.getText().replaceAll(" ", "");
+				IndirizzoCentroVax = tfIndirizzoCentroVax.getText().replaceAll(" ", "");
 				try {
-					Socket socket = CentriVaccinali.openSocket();
-					ConnessioneServer cs = new ConnessioneServer(socket,"centroVax", CV);
-					System.out.println(cs.richiestaServer(cs));
-				} catch (IOException | ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					 NCivico = Integer.valueOf(tfNCivico.getText().replaceAll(" ", ""));
+				} catch (NumberFormatException a) {
+					showMessageDialog(null,"Formato del numero civico non valido");
 				}
-				OperatoriForm.window.frmAppOperatori.setVisible(true);
-				frame.dispose();
-			}
+				Comune = tfComune.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+				SiglaProvincia = tfSiglaProvincia.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+				IndirizzoCentroVax = tfIndirizzoCentroVax.getText().replaceAll(" ", "");
+				try {
+					CAP = Integer.valueOf(tfCAP.getText().replaceAll(" ", ""));
+				} catch (NumberFormatException a) {
+					showMessageDialog(null,"Formato del CAP non valido");
+				}
+				
+				if (centrovax.isEmpty() || IndirizzoCentroVax.isEmpty() || Comune.isEmpty() || SiglaProvincia.isEmpty()  || CAP.toString().isEmpty() || (CAP.toString().length()>5))		validità = false;		
+				if (validità == true) {
+				
+					CV = new CentroVaccinale(centrovax, IndirizzoCentroVax, NCivico, 
+						Comune, SiglaProvincia, CAP, (String) comboBox.getSelectedItem(),-1,0);
+				
+					//System.out.println(CV.tipologia);	
+				
+					try {
+						Socket socket = CentriVaccinali.openSocket();
+						ConnessioneServer cs = new ConnessioneServer(socket,"centroVax", CV);
+						System.out.println(cs.richiestaServer(cs)); 
+					} catch (IOException | ClassNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					OperatoriForm.window.frmAppOperatori.setVisible(true);
+					frame.dispose();
+				} else {
+					showMessageDialog(null,"Errore compilazione campi");
+				}
+			   }
 		});
 		btnRegistra.setBounds(164, 273, 89, 23);
 		contentPane.add(btnRegistra);

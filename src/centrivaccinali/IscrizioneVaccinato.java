@@ -259,39 +259,54 @@ public class IscrizioneVaccinato extends JFrame {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(tfCentroVaxSelezionato.getText().isEmpty()) {
-					showMessageDialog(null,"Selezionare il centro in cui si è stata eseguita la vaccinazione");
+					showMessageDialog(null,"Selezionare il centro in cui si Ã¨ stata eseguita la vaccinazione");
 				}else {
-					String sDate1=tfDataVaccinazione.getText();  
-					SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
-					Date parsed = null;
-					try {
-						parsed = format.parse(sDate1);
-					} catch (ParseException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					}
-					java.sql.Date sql = new java.sql.Date(parsed.getTime());
-			    
-		
-					user = new Utente(tfCentroVaxSelezionato.getText(), tfNomeVaccinato.getText(), 
-							tfCognomeVaccinato.getText(), tfCodiceFiscale.getText(), sql,
-							(String)cbVax.getSelectedItem() );
-					try {
-						//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
-						Socket socket = CentriVaccinali.openSocket();
-						ConnessioneServer cs = new ConnessioneServer(socket,"registrazioneVaccinato", user);
+					String sDate1=tfDataVaccinazione.getText(); 
+					if (sDate1.isEmpty()) {
+						showMessageDialog(null,"Immettere data vaccinazione");
+					} else {
+						SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
+						Date parsed = null;
+						try {
+							parsed = format.parse(sDate1);
+						} catch (ParseException e2) {
+							// TODO Auto-generated catch block
+							e2.printStackTrace();
+						}
+						java.sql.Date sql = new java.sql.Date(parsed.getTime());
 					
-						System.out.println(ConnessioneServer.richiestaServer(cs));
-					} catch (IOException | ClassNotFoundException e1) {
+						Boolean validità = true;
 					
-						e1.printStackTrace();
+						String NomeVaccinato = tfNomeVaccinato.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+						String CognomeVaccinato = tfCognomeVaccinato.getText().replaceAll(" ", "").replaceAll("[0-9]","");
+						String CodiceFiscale = tfCodiceFiscale.getText().replaceAll(" ", "");
+						
+						if (NomeVaccinato.isEmpty()||CognomeVaccinato.isEmpty()||CodiceFiscale.isEmpty())		 validità = false;			
+						
+						if (validità==true) {
+								user = new Utente(tfCentroVaxSelezionato.getText(), NomeVaccinato, 
+								CognomeVaccinato, CodiceFiscale, sql,
+								(String)cbVax.getSelectedItem() );
+								try {	
+									//System.out.println("centyro vax rilevato dal client "+tfCentroVaxSelezionato.getText());
+									Socket socket = CentriVaccinali.openSocket();
+									ConnessioneServer cs = new ConnessioneServer(socket,"registrazioneVaccinato", user);
+					
+									System.out.println(ConnessioneServer.richiestaServer(cs));
+								} catch (IOException | ClassNotFoundException e1) {
+					
+									e1.printStackTrace();
+								}
+								showMessageDialog(null,"Id univoco vaccinato : "+IdUnivoco);
+								/*OperatoriForm.window.frmAppOperatori.setVisible(true);
+						frame.dispose();*/
+						} else {
+							showMessageDialog(null,"Ci sono stringhe vuote");
+						}
 					}
-					showMessageDialog(null,"Id univoco vaccinato : "+IdUnivoco);
-					/*OperatoriForm.window.frmAppOperatori.setVisible(true);
-					frame.dispose();*/
+				   }
 				}
-			}
-		});
+			});
 		btnRegistra.setBounds(415, 409, 89, 23);
 		contentPane.add(btnRegistra);
 		
