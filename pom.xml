@@ -3,6 +3,14 @@
   <groupId>CentroVaccinale</groupId>
   <artifactId>CentroVaccinale</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+      	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+		<dependency>
+    		<groupId>org.postgresql</groupId>
+    		<artifactId>postgresql</artifactId>
+    		<version>42.3.4</version>
+		</dependency>
+  </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -14,7 +22,6 @@
       </resource>
     </resources>
     <plugins>
-    
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
@@ -36,17 +43,16 @@
                 <execution>
                 <id>default-cli</id>
                 <configuration>
-            	<mainClass>server.ServerThread</mainClass>
+            		<mainClass>server.ServerThread</mainClass>
             	</configuration>
                 </execution>
  				   <execution>
                 <id>second-cli</id>
                 <configuration>
-            	<mainClass>centrivaccinali.CentriVaccinali</mainClass>
+            		<mainClass>centrivaccinali.CentriVaccinali</mainClass>
             	</configuration>
                 </execution>
             </executions>
-            
        </plugin>
     </plugins>
   </build>
