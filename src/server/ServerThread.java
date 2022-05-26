@@ -63,6 +63,7 @@ public static void main(String[] args) {
 	    	 
 	    	 ServerSocket s = new ServerSocket(PORT);  
 	    	 conn = connect();
+	    	 showMessageDialog(null,"Server started");
 		     System.out.println("Server started");
 	         Socket socket = s.accept();
 	         new ServerThread(socket);

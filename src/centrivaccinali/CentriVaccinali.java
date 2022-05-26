@@ -20,11 +20,11 @@ public class CentriVaccinali {
 	static OperatoriForm OF = new OperatoriForm();
 	static CentriVaccinali window = new CentriVaccinali();
 	public static JFrame frmProgettoCentriVaccinali;
-	
+
 	public static Socket socket;
 	public static ObjectInputStream ins;
 	public static ObjectOutputStream outs;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -33,16 +33,16 @@ public class CentriVaccinali {
 			public void run() {
 				try {
 					frmProgettoCentriVaccinali.setVisible(true);
-					
+
 					//openSocket();
-					
-					
+
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
-				
-				
+
+
+
 			}
 		});
 	}
@@ -63,10 +63,10 @@ public class CentriVaccinali {
 		frmProgettoCentriVaccinali.setBounds(100, 100, 450, 300);
 		frmProgettoCentriVaccinali.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmProgettoCentriVaccinali.getContentPane().setLayout(null);
-		
+
 		JButton btnCittadini = new JButton("Cittadino");
 		btnCittadini.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
 				frmProgettoCentriVaccinali.setVisible(false);
 				CittadiniForm.frmCittadini.setVisible(true);
@@ -74,7 +74,7 @@ public class CentriVaccinali {
 		});
 		btnCittadini.setBounds(317, 97, 107, 59);
 		frmProgettoCentriVaccinali.getContentPane().add(btnCittadini);
-		
+
 		JButton btnOperatore = new JButton("Operatore");
 		btnOperatore.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -85,7 +85,7 @@ public class CentriVaccinali {
 		btnOperatore.setBounds(10, 97, 107, 59);
 		frmProgettoCentriVaccinali.getContentPane().add(btnOperatore);
 	}
-	
+
 	public static Socket openSocket() {
 		InetAddress addr;
 		try {
@@ -97,9 +97,9 @@ public class CentriVaccinali {
 			e.printStackTrace();
 		}
 		return socket;
-		
-		
+
+
 	}
 
-	
+
 }
