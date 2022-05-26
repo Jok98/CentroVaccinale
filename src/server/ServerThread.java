@@ -2,6 +2,7 @@ package server;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
+import java.awt.HeadlessException;
 import java.io.*;
 import java.net.*;
 import java.sql.Connection;
@@ -17,6 +18,7 @@ import centrivaccinali.*;
 import cittadini.Utente;
 
 public class ServerThread extends Thread{
+	
 	private static String url = "jdbc:postgresql://127.0.0.1/Laboratorio";
 	private static  String user = "postgres";
 	private static  String password = "admin";
@@ -27,10 +29,13 @@ public class ServerThread extends Thread{
 	private ObjectInputStream oin;
 	private ObjectOutputStream oout;
 	private PreparedStatement statement;
+	
 	private static ArrayList<CentroVaccinale> cvlis = new ArrayList<CentroVaccinale>();
 	private ArrayList<Object> Eventi_Avversi = new ArrayList<Object>();
 	private HashMap <String, String> datiLogIn = new HashMap <String, String>();
-	private static Scanner scanner = new Scanner(System.in);
+	private static Boolean first_AD=true;
+	//private static Scanner scanner = new Scanner(System.in);
+	
 	ServerThread (Socket s){
 		socket = s;
 		try {
@@ -43,13 +48,14 @@ public class ServerThread extends Thread{
 	
 public static void main(String[] args) {
 	    try {
-	    	String changeDb="";
+	    	
 	      while (true) {
 	    	/*do {
+	    	 	 String changeDb="";
 	    		 System.out.println("Vuoi modificare dati login database? y/n");
 	    		 Scanner scanner = new Scanner(System.in);
 	    		 changeDb  = scanner.next();
-	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));*/
+	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));
 	    	 //System.out.println("digitato : "+changeDb);
 	    	 if(changeDb.equals("y")) {
 	    		 System.out.println("inserire nuovi parametri : \r");
@@ -59,11 +65,11 @@ public static void main(String[] args) {
 	    		 user = scanner.nextLine();
 	    		 System.out.println("inserire nuova password db : \r");
 	    		 password = scanner.nextLine();
-	    	 }
+	    	 }*/
 	    	 
 	    	 ServerSocket s = new ServerSocket(PORT);  
 	    	 conn = connect();
-	    	 showMessageDialog(null,"Server started");
+	    	 if(first_AD==true)showMessageDialog(null,"Server started"); else first_AD=false;
 		     System.out.println("Server started");
 	         Socket socket = s.accept();
 	         new ServerThread(socket);
@@ -83,7 +89,7 @@ public static void main(String[] args) {
 	    	 s.close();
 	
 	    }
-	    } catch (IOException e) {
+	    } catch (IOException  e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -95,7 +101,9 @@ public static void main(String[] args) {
 	Connection conn = null;
 	  try {
           conn = DriverManager.getConnection(url, user, password);
-          System.out.println("Connessione al server PostgreSQL effettuata.");
+          System.out.println("Connessione al database PostgreSQL effettuata");
+          if(first_AD==true)showMessageDialog(null,"Connessione al database PostgreSQL effettuata");
+          //showMessageDialog(null,"Connessione al database PostgreSQL effettuata");
       } catch (SQLException e) {
           System.out.println(e.getMessage());
       }

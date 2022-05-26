@@ -129,7 +129,7 @@ public class Registrazione {
 		btnRegistra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Boolean check = true;
+				Boolean isValid = true;
 				String password,NomeCentroVax,Nome,Cognome,CodiceFiscale,Email,UserID;
 				Integer IDUnivocoVax;
 				NomeCentroVax =	tf_NomeCentroVax.getText().replaceAll(" ", "");
@@ -147,8 +147,8 @@ public class Registrazione {
 				}
 				
 				if (NomeCentroVax.isEmpty() || Nome.isEmpty() || Cognome.isEmpty() || CodiceFiscale.isEmpty()  
-						|| Email.toString().isEmpty() || !(Email.contains("@")) || UserID.isEmpty() || password.isEmpty())	check = false;	
-				if (check == true) {
+						|| Email.toString().isEmpty() || !(Email.contains("@")) || UserID.isEmpty() || password.isEmpty())	isValid = false;	
+				if (isValid == true) {
 				
 				Utente user = new Utente(tf_NomeCentroVax.getText(),tfNome.getText(), tfCognome.getText(), tfCodiceFiscale.getText(), tfEmail.getText(),
 						tfUserID.getText(), password, Integer.valueOf(tfIDUnivocoVax.getText()));

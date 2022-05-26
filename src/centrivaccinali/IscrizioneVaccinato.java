@@ -51,7 +51,7 @@ public class IscrizioneVaccinato extends JFrame {
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	private JTextField tfDataVaccinazione;
+	private JTextField tf_gg;
 	static int IdUnivoco;
 	
 	public static IscrizioneVaccinato frame = new IscrizioneVaccinato();
@@ -59,6 +59,8 @@ public class IscrizioneVaccinato extends JFrame {
 	private ArrayList<CentroVaccinale> src_result;
 	
 	public Utente user;
+	private JLabel lbl_mm;
+	private JTextField tf_aaaa;
 	
 	/**
 	 * Launch the application.
@@ -233,10 +235,10 @@ public class IscrizioneVaccinato extends JFrame {
 		lblNewLabel_3.setBounds(10, 340, 163, 14);
 		contentPane.add(lblNewLabel_3);
 		
-		tfDataVaccinazione = new JTextField();
-		tfDataVaccinazione.setBounds(168, 337, 321, 20);
-		contentPane.add(tfDataVaccinazione);
-		tfDataVaccinazione.setColumns(10);
+		tf_gg = new JTextField();
+		tf_gg.setBounds(189, 337, 46, 20);
+		contentPane.add(tf_gg);
+		tf_gg.setColumns(10);
 		//
 		
 		/**
@@ -249,20 +251,74 @@ public class IscrizioneVaccinato extends JFrame {
 		JComboBox cbVax = new JComboBox();
 		cbVax.setModel(new DefaultComboBoxModel(new String[] {"Pfizer", "AstraZeneca", "Moderna", "J&J"}));
 		cbVax.setSelectedIndex(0);
-		cbVax.setBounds(168, 365, 134, 22);
+		cbVax.setBounds(168, 365, 163, 22);
 		contentPane.add(cbVax);
 		//
 		
 		
+
+		
+		/**
+		 * 
+		 */
+		JButton btnBack = new JButton("Indietro");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OperatoriForm.window.frmAppOperatori.setVisible(true);
+				frame.dispose();
+			}
+		});
+		btnBack.setBounds(10, 409, 89, 23);
+		contentPane.add(btnBack);
+		
+		JButton btnDatiCentroVax = new JButton("Mostra dati");
+		btnDatiCentroVax.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String centrovax_selected=src_result.get(listCentriVax.getSelectedIndex()).getNome();
+				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
+			}
+		});
+		btnDatiCentroVax.setBounds(341, 120, 163, 23);
+		contentPane.add(btnDatiCentroVax);
+		
+		JComboBox cb_Month = new JComboBox();
+		cb_Month.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}));
+		cb_Month.setSelectedIndex(0);
+		cb_Month.setBounds(285, 337, 46, 22);
+		contentPane.add(cb_Month);
+		
+		JLabel lbl_gg = new JLabel("gg");
+		lbl_gg.setBounds(168, 340, 27, 14);
+		contentPane.add(lbl_gg);
+		
+		lbl_mm = new JLabel("mm");
+		lbl_mm.setBounds(256, 340, 27, 14);
+		contentPane.add(lbl_mm);
+		
+		tf_aaaa = new JTextField();
+		tf_aaaa.setBounds(403, 337, 86, 20);
+		contentPane.add(tf_aaaa);
+		tf_aaaa.setColumns(10);
+		
+		JLabel lbl_aaaa = new JLabel("aaaa");
+		lbl_aaaa.setBounds(366, 340, 27, 14);
+		contentPane.add(lbl_aaaa);
+		//
+		
+		/**
+		 * s/button registra
+		 */
 		JButton btnRegistra = new JButton("Registra");
 		btnRegistra.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				if(tfCentroVaxSelezionato.getText().isEmpty()) {
-					showMessageDialog(null,"Selezionare il centro in cui si Ã¨ stata eseguita la vaccinazione");
+					showMessageDialog(null,"Selezionare il centro in cui si e' stata eseguita la vaccinazione");
 				}else {
-					String sDate1=tfDataVaccinazione.getText(); 
-					if (sDate1.isEmpty()) {
+					String gg = (tf_gg.getText().length()<2)? "0"+tf_gg.getText():null;
+					String sDate1=gg+((String) cb_Month.getSelectedItem())+tf_aaaa.getText(); 
+					System.out.println("data della vaccinazione :"+sDate1);
+					if (sDate1.isEmpty()& sDate1.length()!=6) {
 						showMessageDialog(null,"Immettere data vaccinazione");
 					} else {
 						SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
@@ -275,15 +331,15 @@ public class IscrizioneVaccinato extends JFrame {
 						}
 						java.sql.Date sql = new java.sql.Date(parsed.getTime());
 					
-						Boolean validità = true;
+						Boolean isValid = true;
 					
 						String NomeVaccinato = tfNomeVaccinato.getText().replaceAll(" ", "").replaceAll("[0-9]","");
 						String CognomeVaccinato = tfCognomeVaccinato.getText().replaceAll(" ", "").replaceAll("[0-9]","");
 						String CodiceFiscale = tfCodiceFiscale.getText().replaceAll(" ", "");
 						
-						if (NomeVaccinato.isEmpty()||CognomeVaccinato.isEmpty()||CodiceFiscale.isEmpty())		 validità = false;			
+						if (NomeVaccinato.isEmpty()||CognomeVaccinato.isEmpty()||CodiceFiscale.isEmpty()) isValid = false;			
 						
-						if (validità==true) {
+						if (isValid==true) {
 								user = new Utente(tfCentroVaxSelezionato.getText(), NomeVaccinato, 
 								CognomeVaccinato, CodiceFiscale, sql,
 								(String)cbVax.getSelectedItem() );
@@ -309,30 +365,8 @@ public class IscrizioneVaccinato extends JFrame {
 			});
 		btnRegistra.setBounds(415, 409, 89, 23);
 		contentPane.add(btnRegistra);
+		// e/button registra
 		
-		/**
-		 * 
-		 */
-		JButton btnBack = new JButton("Indietro");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OperatoriForm.window.frmAppOperatori.setVisible(true);
-				frame.dispose();
-			}
-		});
-		btnBack.setBounds(10, 409, 89, 23);
-		contentPane.add(btnBack);
-		
-		JButton btnDatiCentroVax = new JButton("Mostra dati");
-		btnDatiCentroVax.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String centrovax_selected=src_result.get(listCentriVax.getSelectedIndex()).getNome();
-				showMessageDialog(null, "Informazione del Centro vaccinale : \r\n"+src_result.get(listCentriVax.getSelectedIndex()).getInfo());
-			}
-		});
-		btnDatiCentroVax.setBounds(341, 120, 163, 23);
-		contentPane.add(btnDatiCentroVax);
-		//
 	
 	}
 }

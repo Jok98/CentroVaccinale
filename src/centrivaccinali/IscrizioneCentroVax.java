@@ -187,7 +187,7 @@ public class IscrizioneCentroVax extends JFrame {
 		btnRegistra.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
-				Boolean validità = true;
+				Boolean isValid = true;
 				Integer NCivico = null;
 				Integer CAP = null;
 				String centrovax, IndirizzoCentroVax,  Comune, SiglaProvincia;
@@ -208,8 +208,10 @@ public class IscrizioneCentroVax extends JFrame {
 					showMessageDialog(null,"Formato del CAP non valido");
 				}
 				
-				if (centrovax.isEmpty() || IndirizzoCentroVax.isEmpty() || Comune.isEmpty() || SiglaProvincia.isEmpty()  || CAP.toString().isEmpty() || (CAP.toString().length()>5))		validità = false;		
-				if (validità == true) {
+				if (centrovax.isEmpty() || IndirizzoCentroVax.isEmpty() || Comune.isEmpty() || SiglaProvincia.isEmpty()  
+						|| CAP.toString().isEmpty() || (CAP.toString().length()>5))	isValid = false;
+				
+				if (isValid == true) {
 				
 					CV = new CentroVaccinale(centrovax, IndirizzoCentroVax, NCivico, 
 						Comune, SiglaProvincia, CAP, (String) comboBox.getSelectedItem(),-1,0);
