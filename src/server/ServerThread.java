@@ -19,7 +19,7 @@ import cittadini.Utente;
 
 public class ServerThread extends Thread{
 	
-	private static String url = "jdbc:postgresql://127.0.0.1/Laboratorio";
+	private static String url = "jdbc:postgresql://127.0.0.1/laboratorio";
 	private static  String user = "postgres";
 	private static  String password = "admin";
 	static Connection conn = null;
@@ -69,7 +69,8 @@ public static void main(String[] args) {
 	    	 
 	    	 ServerSocket s = new ServerSocket(PORT);  
 	    	 conn = connect();
-	    	 if(first_AD==true)showMessageDialog(null,"Server started"); else first_AD=false;
+	    	 if(first_AD==true)showMessageDialog(null,"Server started");
+	    	 first_AD=false;
 		     System.out.println("Server started");
 	         Socket socket = s.accept();
 	         new ServerThread(socket);
