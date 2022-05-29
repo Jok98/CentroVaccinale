@@ -20,13 +20,13 @@ import centrivaccinali.ConnessioneServer;
 public class Registrazione {
 
 	static JFrame frame;
-	private JTextField tfNome;
-	private JTextField tfCognome;
-	private JTextField tfCodiceFiscale;
-	private JTextField tfEmail;
-	private JTextField tfUserID;
-	private JPasswordField passwordField;
-	private JTextField tfIDUnivocoVax;
+	private static JTextField tfNome;
+	private static JTextField tfCognome;
+	private static JTextField tfCodiceFiscale;
+	private static JTextField tfEmail;
+	private static JTextField tfUserID;
+	private static JPasswordField passwordField;
+	private static JTextField tfIDUnivocoVax;
 	static JTextField tf_NomeCentroVax;
 	static Registrazione window;
 	/**
@@ -178,6 +178,7 @@ public class Registrazione {
 			
 			public void actionPerformed(ActionEvent e) {
 				CittadiniForm.frmCittadini.setVisible(true);
+				CleanAll();
 				frame.dispose();
 			}
 		});
@@ -191,14 +192,35 @@ public class Registrazione {
 		lbl_CentroVax.setBounds(10, 223, 150, 14);
 		frame.getContentPane().add(lbl_CentroVax);
 		
-		/**
-		 * 
-		 */
+		//Start tf_NomeCentroVax
 		tf_NomeCentroVax = new JTextField();
 		tf_NomeCentroVax.setEditable(false);
 		tf_NomeCentroVax.setBounds(174, 220, 250, 20);
 		frame.getContentPane().add(tf_NomeCentroVax);
 		tf_NomeCentroVax.setColumns(10);
-		//
+		//End tf_NomeCentroVax
+		
+		//Start btnPulisci
+		JButton btnPulisci = new JButton("Pulisci");
+		btnPulisci.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CleanAll();
+			}
+		});
+		btnPulisci.setBounds(335, 248, 89, 23);
+		frame.getContentPane().add(btnPulisci);
+		//end btnPulisci
+	}
+	static void CleanAll() {
+		
+		tfNome.setText("");
+		tfCognome.setText("");
+		tfCodiceFiscale.setText("");
+		tfEmail.setText("");
+		tfUserID.setText("");
+		passwordField.setText("");
+		tfIDUnivocoVax.setText("");
+		tf_NomeCentroVax.setText("");
+		
 	}
 }

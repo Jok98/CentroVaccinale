@@ -38,30 +38,34 @@ public class IscrizioneVaccinato extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField tfRicercaCentriVax;
+	
 	private JButton btnRicercaCentriVax;
-	private JLabel lblRicercaCentriVax;
 	private JButton btnSelezionaCentroVax;
+	private JButton btnPulisci;
+	private static JTextField tfRicercaCentriVax;
+	private static JTextField tfCentroVaxSelezionato;
+	private static JTextField tfNomeVaccinato;
+	private static JTextField tfCognomeVaccinato;
+	private static JTextField tfCodiceFiscale;
+	private static JTextField tf_gg;
+	private static JTextField tf_aaaa;
+	
 	private JLabel lblCentroVaxSelezionato;
-	private JTextField tfCentroVaxSelezionato;
+	private JLabel lblRicercaCentriVax;
 	private JLabel lblNomeVaccinato;
-	private JTextField tfNomeVaccinato;
 	private JLabel lblNewLabel;
-	private JTextField tfCognomeVaccinato;
-	private JTextField tfCodiceFiscale;
 	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	private JTextField tf_gg;
+	private JLabel lbl_mm;
 	static int IdUnivoco;
 	
 	public static IscrizioneVaccinato frame = new IscrizioneVaccinato();
-	
 	private ArrayList<CentroVaccinale> src_result;
 	
 	public Utente user;
-	private JLabel lbl_mm;
-	private JTextField tf_aaaa;
+	
+	
 	
 	/**
 	 * Launch the application.
@@ -84,6 +88,7 @@ public class IscrizioneVaccinato extends JFrame {
 	 */
 	@SuppressWarnings({ "unchecked", "serial", "rawtypes" })
 	public IscrizioneVaccinato() {
+		setResizable(false);
 		setTitle("Iscrizione vaccinato");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 530, 479);
@@ -261,18 +266,6 @@ public class IscrizioneVaccinato extends JFrame {
 		cbVax.setBounds(168, 365, 163, 22);
 		contentPane.add(cbVax);
 		//End ComboBox cbVax contiene tipologie vaccini
-	
-		//Start button btnBack
-		JButton btnBack = new JButton("Indietro");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				OperatoriForm.window.frmAppOperatori.setVisible(true);
-				frame.dispose();
-			}
-		});
-		btnBack.setBounds(10, 409, 89, 23);
-		contentPane.add(btnBack);
-		//End button btnBack
 		
 		//Start button btnDatiCentroVax
 		JButton btnDatiCentroVax = new JButton("Mostra dati");
@@ -315,7 +308,7 @@ public class IscrizioneVaccinato extends JFrame {
 		
 		//Start label lbl_aaaa
 		JLabel lbl_aaaa = new JLabel("aaaa");
-		lbl_aaaa.setBounds(366, 340, 27, 14);
+		lbl_aaaa.setBounds(360, 340, 33, 14);
 		contentPane.add(lbl_aaaa);
 		//End label lbl_aaaa
 		
@@ -376,10 +369,45 @@ public class IscrizioneVaccinato extends JFrame {
 				   }
 				}
 			});
-		btnRegistra.setBounds(415, 409, 89, 23);
+		btnRegistra.setBounds(168, 409, 89, 23);
 		contentPane.add(btnRegistra);
 		//End Button btnRegistra
 		
-	
+		//Start button btnBack
+		JButton btnBack = new JButton("Indietro");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OperatoriForm.window.frmAppOperatori.setVisible(true);
+				CleanAll();
+				frame.dispose();
+			}
+		});
+		btnBack.setBounds(10, 409, 89, 23);
+		contentPane.add(btnBack);
+		
+		btnPulisci = new JButton("Pulisci");
+		btnPulisci.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CleanAll();
+			}
+		});
+		btnPulisci.setBounds(415, 409, 89, 23);
+		contentPane.add(btnPulisci);
+		//End button btnBack
+	}
+	static void CleanAll() {
+		
+		try {
+			tfRicercaCentriVax.setText("");
+			tfCentroVaxSelezionato.setText("");
+			tfNomeVaccinato.setText("");
+			tfCognomeVaccinato.setText("");
+			tfCodiceFiscale.setText("");
+			tf_gg.setText("");
+			tf_aaaa.setText("");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

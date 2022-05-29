@@ -34,11 +34,12 @@ public class IscrizioneCentroVax extends JFrame {
 	private static final long serialVersionUID = 1L;
 	public CentroVaccinale CV;
 	private JPanel contentPane;
-	private JTextField tfIndirizzoCentroVax;
-	private JTextField tfNCivico;
-	private JTextField tfComune;
-	private JTextField tfSiglaProvincia;
-	private JTextField tfCAP;
+	private static JTextField tfNomeCentroVax;
+	private static JTextField tfIndirizzoCentroVax;
+	private static JTextField tfNCivico;
+	private static JTextField tfComune;
+	private static JTextField tfSiglaProvincia;
+	private static JTextField tfCAP;
 	
 	ConnessioneServer cs ;
 	
@@ -82,7 +83,7 @@ public class IscrizioneCentroVax extends JFrame {
 		//End label lblNomeCentroVax
 		
 		//Start textfield tfNomeCentroVax
-		JTextField tfNomeCentroVax = new JTextField();
+		tfNomeCentroVax = new JTextField();
 		tfNomeCentroVax.setBounds(164, 25, 260, 20);
 		contentPane.add(tfNomeCentroVax);
 		tfNomeCentroVax.setColumns(10);
@@ -236,13 +237,7 @@ public class IscrizioneCentroVax extends JFrame {
 			@SuppressWarnings("static-access")
 			public void actionPerformed(ActionEvent e) {
 				OperatoriForm.window.frmAppOperatori.setVisible(true);
-				tfNomeCentroVax.setText("");
-				tfIndirizzoCentroVax.setText("");
-				tfNCivico.setText("");
-				tfComune.setText("");
-				tfSiglaProvincia.setText("");
-				tfIndirizzoCentroVax.setText("");
-				tfCAP.setText("");
+				CleanAll();
 				dispose();
 			}
 		});
@@ -250,8 +245,31 @@ public class IscrizioneCentroVax extends JFrame {
 		contentPane.add(btnBack);
 		//End btnBack
 		
+		//Start button Pulisci
+		JButton btnPulisci = new JButton("Pulisci");
+		btnPulisci.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CleanAll();
+			}
+		});
+		btnPulisci.setBounds(335, 273, 89, 23);
+		contentPane.add(btnPulisci);
+		//End button Pulisci
+
+	}
+	static void CleanAll() {
+		
+		try {
+			tfNomeCentroVax.setText("");
+			tfIndirizzoCentroVax.setText("");
+			tfNCivico.setText("");
+			tfComune.setText("");
+			tfSiglaProvincia.setText("");
+			tfIndirizzoCentroVax.setText("");
+			tfCAP.setText("");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
-	
-	
 }
