@@ -38,7 +38,8 @@ public class AccessoAutenticato {
 	private JTextField tf_4;
 	private JTextField tf_5;
 	/**
-	 * Launch the application.
+	 * Lancia l'applicazione 
+	 * @throws Exception
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -54,15 +55,12 @@ public class AccessoAutenticato {
 	}
 
 	/**
-	 * Create the application.
+	 * Inizializza il contenuto del frame
 	 */
 	public AccessoAutenticato() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	@SuppressWarnings("serial")
 	private void initialize() {
 		frmInvioDatiEventi = new JFrame();
@@ -155,8 +153,13 @@ public class AccessoAutenticato {
 		JButton btnSegnala = new JButton("Segnala");
 		btnSegnala.addActionListener(new ActionListener() {
 		/**
-		 * @param e
-		 * TODO da inserire controlli su input e modificare valore cella note in stringa
+		 * 
+		 *Questo metodo raccoglie i dati inseriti dall'utente, li inserisce nell'ArrayList di tipo Oggetto e li
+		 *invia al server tramite ConnessioneServer per inserire poi i dati nel DB e aggiornare la media 
+		 * @param e Azione dell'utente
+		 * @return void
+		 * @throws IOException nel caso di operazioni I/O fallite o corrotte
+		 * @throws ClassNotFoundException nel caso in cui si cerchi di caricare una classe non trovata
 		 * 
 		 */
 			public void actionPerformed(ActionEvent e) {

@@ -9,7 +9,8 @@ public class Utente implements Serializable {
 	Date datavacc;
 	int idvax;
 	/**
-	 * Costruttore usato dalla classe Iscrizione vaccinato
+	 * Costruttore usato dalla classe IscrizioneVaccinato per registrare
+	 * il vaccinato nel database nella tabella cittadini_registrati
 	 * @param nomecvacc
 	 * @param nome
 	 * @param cognome
@@ -28,6 +29,18 @@ public class Utente implements Serializable {
 		this.vacc = vacc;
 	}
 	
+	/**
+	 * Costruttore usato dalla classe Registrazione per registrare il cittadino 
+	 * nel database nella tabella vaccinati_+nomeCentroVax
+	 * @param nomecvacc
+	 * @param nome
+	 * @param cognome
+	 * @param codfisc
+	 * @param email
+	 * @param userID
+	 * @param password
+	 * @param idvax
+	 */
 	public Utente(String nomecvacc,String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
 		this.nomecvacc= nomecvacc;
 		this.nome = nome;
@@ -72,5 +85,5 @@ public class Utente implements Serializable {
 		
 	}
 	
-
 }
+
