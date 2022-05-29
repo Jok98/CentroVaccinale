@@ -2,11 +2,15 @@ package centrivaccinali;
 
 import java.io.Serializable;
 
+/**
+ * 
+ * @author Moi Matteo/Alex Rabuffetti
+ *
+ */
 public class CentroVaccinale implements Serializable {
 	
-	/**
-	 * chiave utilizzata per ricostruire la classe dopo la serializzazione a uno stream di byte
-	 */
+	
+	//chiave utilizzata per ricostruire la classe dopo la serializzazione a uno stream di byte
 	private static final long serialVersionUID = 7613409875169727612L;
 	String nome ;
 	String via ;
@@ -20,9 +24,9 @@ public class CentroVaccinale implements Serializable {
 	public static String richiesta ="centrovax";
 	
 	/**
-	 * Il costruttore crea un istanza con argomenti :
+	 * Il costruttore imposta un nuovo centro vaccinale con argomenti :
 	 * @param nome
-	 * @param via
+	 * @param via 
 	 * @param nciv
 	 * @param citta
 	 * @param prov
@@ -42,63 +46,63 @@ public class CentroVaccinale implements Serializable {
 	}
 	
 	/**
-	 * Il metodo getCitta() restituisce la citta del centro vaccinale
-	 * @return
+	 * restituisce la citta del centro vaccinale
+	 * @return comune
 	 */
 	public String getComune() {
 		return this.comune;
 	}
 	
 	/**
-	 * Il metodo getVia() restituisce la via del centro vaccinale
-	 * @return
+	 * restituisce la via del centro vaccinale
+	 * @return via
 	 */
 	public String getVia() {
 		return this.via;
 	}
 	
 	/**
-	 * Il metodo getCap() restituisce il cap del centro vaccinale
-	 * @return
+	 * restituisce il cap del centro vaccinale
+	 * @return CAP
 	 */
 	public Integer getCap() {
 		return this.CAP;
 	}
 	
 	/**
-	 * Il metodo getNome() restituisce il nome del centro vaccinale
-	 * @return
+	 * restituisce il nome del centro vaccinale
+	 * @return nome
 	 */
 	public String getNome() {
 		return this.nome;
 	}
 	/**
-	 * Il metodo gettipologiaris() restituisce il tipologiao del centro vaccinale
-	 * @return
+	 * restituisce il tipologiao del centro vaccinale
+	 * @return tipologia
 	 */
 	public String getTipologia() {
 		return this.tipologia;
 	}
 	
 	/**
-	 * Il metodo getProv() restituisce la provincia del centro vaccinale
-	 * @return
+	 * restituisce la provincia del centro vaccinale
+	 * @return prov
 	 */
 	public String getProv() {
 		return this.prov;
 	}
 	
 	/**
-	 * Il metodo getNciv() restituisce il numero civico del centro vaccinale
-	 * @return
+	 * restituisce il numero civico del centro vaccinale
+	 * @return nciv
 	 */
 	public Integer getNciv() {
 		return this.nciv;
 	}
 	
 	/**
-	 * Il metodo getInfo() restituisce tutte le informazioni del centro vaccinale 
-	 * @return
+	 * restituisce tutte le informazioni del centro vaccinale : nome,via,comune,CAP,prov,tipologia,severità media,numero segnalazioni
+	 * @return info
 	 */
 	public String getInfo() {
 		String info = "Nome : " + this.nome + "\r\n"+"Via : " + this.via + ", " + this.comune + " " + this.CAP + ", " + this.prov + "\r\n"+"Tipologia centro : " + this.tipologia

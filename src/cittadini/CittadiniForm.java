@@ -70,8 +70,6 @@ public class CittadiniForm {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	
-	
 	@SuppressWarnings("unchecked")
 	private void initialize() {
 		frmCittadini = new JFrame();
@@ -96,13 +94,11 @@ public class CittadiniForm {
 					
 						e1.printStackTrace();
 					}
-				//AccessConf.frmInvioDatiEventi.setVisible(true);
-				//frmCittadini.setVisible(false);
-				
 			}
 		});
 		btnLogIn.setBounds(460, 452, 89, 23);
 		frmCittadini.getContentPane().add(btnLogIn);
+		
 		
 		JButton btnRegistrazione = new JButton("Registrati");
 		btnRegistrazione.addActionListener(new ActionListener() {

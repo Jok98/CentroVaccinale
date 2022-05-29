@@ -28,21 +28,6 @@ public class Utente implements Serializable {
 		this.vacc = vacc;
 	}
 	
-	/**
-	 * Costruttore usato dalla classe registrazione per registrare un cittadino
-	 * @param nomecvacc
-	 * @param nome
-	 * @param cognome
-	 * @param codfisc
-	 * @param datavacc
-	 * @param vacc
-	 
-	public Utente(String nomecvacc, String nome, String cognome, String codfisc, Date datavacc, String vacc) {
-
-		
-
-	}*/
-	
 	public Utente(String nomecvacc,String nome, String cognome, String codfisc, String email, String userID, String password, int idvax) {
 		this.nomecvacc= nomecvacc;
 		this.nome = nome;

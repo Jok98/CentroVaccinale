@@ -47,6 +47,7 @@ public class OperatoriForm {
 		frmAppOperatori.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAppOperatori.getContentPane().setLayout(null);
 		
+		//Start Button Iscrizione centro vaccinale
 		JButton btnNewButton = new JButton("Iscrizione centro vaccinale");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -57,7 +58,9 @@ public class OperatoriForm {
 		});
 		btnNewButton.setBounds(0, 0, 217, 130);
 		frmAppOperatori.getContentPane().add(btnNewButton);
+		//End Button Iscrizione centro vaccinale
 		
+		//Start Button btnIscrizioneVax
 		JButton btnIscrizioneVax = new JButton("Iscrizione vaccinato");
 		btnIscrizioneVax.setBounds(217, 0, 217, 130);
 		btnIscrizioneVax.addActionListener(new ActionListener() {
@@ -67,7 +70,9 @@ public class OperatoriForm {
 			}
 		});
 		frmAppOperatori.getContentPane().add(btnIscrizioneVax);
+		//End Button btnIscrizioneVax
 		
+		//Start Button btnBack
 		JButton btnBack = new JButton("Indierto");
 		btnBack.addActionListener(new ActionListener() {
 			@SuppressWarnings("static-access")
@@ -78,6 +83,7 @@ public class OperatoriForm {
 		});
 		btnBack.setBounds(168, 141, 101, 32);
 		frmAppOperatori.getContentPane().add(btnBack);
+		//End Button btnBack
 	}
 
 }
