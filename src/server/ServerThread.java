@@ -54,15 +54,16 @@ public class ServerThread extends Thread{
 	 * Questo è il main della classe, dove ci si connette al db e si creano le tabelle fondamentali per il coretto funzionamento del programma 
 	 * @param args
 	 */
+@SuppressWarnings("resource")
 public static void main(String[] args) {
 	    try {
-	    	
-	      while (true) {
-	    	/*do {
-	    	 	 String changeDb="";
-	    		 System.out.println("Vuoi modificare dati login database? y/n");
-	    		 Scanner scanner = new Scanner(System.in);
-	    		 changeDb  = scanner.next();
+	    	if(first_AD==true) {
+	    	Scanner scanner;
+	    	String changeDb="";
+	    	do {
+	    		System.out.println("Vuoi modificare dati login database? y/n");
+	    		scanner = new Scanner(System.in);
+	    		changeDb  = scanner.next();
 	    	 }while((!changeDb.equals("y"))&(!changeDb.equals("n")));
 	    	 //System.out.println("digitato : "+changeDb);
 	    	 if(changeDb.equals("y")) {
@@ -73,12 +74,14 @@ public static void main(String[] args) {
 	    		 user = scanner.nextLine();
 	    		 System.out.println("inserire nuova password db : \r");
 	    		 password = scanner.nextLine();
-	    	 }*/
-	    	 
+	    	 }
+	    	}
+	      while (true) {
+	    	 first_AD=false;
 	    	 ServerSocket s = new ServerSocket(PORT);  
 	    	 conn = connect();
-	    	 if(first_AD==true)showMessageDialog(null,"Server started");
-	    	 first_AD=false;
+	    	 /*if(first_AD==true)showMessageDialog(null,"Server started");
+	    	 first_AD=false;*/
 		     System.out.println("Server started");
 	         Socket socket = s.accept();
 	         new ServerThread(socket);
